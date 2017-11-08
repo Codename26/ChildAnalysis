@@ -2,6 +2,7 @@ package com.codename26.childanalysis;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -27,11 +28,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DataBaseHelper helper = new DataBaseHelper(MainActivity.this);
+        System.out.println(helper.getAnalysis());
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AnalysisFragment analysisFragment = new AnalysisFragment();
+                FragmentManager fm = getSupportFragmentManager();
+                if (findViewById(R.id.fragmentContainer) != null) {
+                    fm.beginTransaction().add(R.id.fragmentContainer, analysisFragment).commit();
+                }
+/*
                 new AgePickerDialogFragment().show(getSupportFragmentManager(), "");
+
+*/
             }
         });
 

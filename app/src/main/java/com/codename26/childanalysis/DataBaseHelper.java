@@ -29,25 +29,67 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 + MainActivity.SUBCATEGORY_ID + " INTEGER NOT NULL,"
                 + MainActivity.ANALYSIS_ID + " INTEGER NOT NULL,"
                 + "FOREIGN KEY ("+ MainActivity.SUBCATEGORY_ID +") REFERENCES " + MainActivity.SUBCATEGORIES_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"),"
-                + "FOREIGN KEY ("+ MainActivity.ANALYSIS_ID +") REFERENCES " + MainActivity.ANALYSIS_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +");");
+                + "FOREIGN KEY ("+ MainActivity.ANALYSIS_ID +") REFERENCES " + MainActivity.ANALYSIS_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"));");
         sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.ANALYSIS_TABLE_NAME + "("
                 + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + MainActivity.ANALYSIS_NAME + " TEXT NOT NULL,"
-                + "1_month TEXT NOT NULL);");
-
-
-
-
-
+                + "sex INTEGER NOT NULL,"
+                + "age TEXT NOT NULL,"
+                + "index REAL NOT NULL,"
+                + "units text NOT NULL);");
+        
+        fillDB(sqLiteDatabase);
     }
 
+    private void fillDB(SQLiteDatabase sqLiteDatabase) {
+        try {
 
-   @Override
+                ContentValues values = new ContentValues();
+                values.put(MainActivity.CATEGORY_NAME, "Анализ крови");
+                sqLiteDatabase.insert(MainActivity.CATEGORIES_TABLE_NAME, null, values);
+
+                values = new ContentValues();
+                values.put(MainActivity.SUBCATEGORY_NAME, "Общий Анализ крови");
+                values.put(MainActivity.CATEGORY_ID, 1);
+            sqLiteDatabase.insert(MainActivity.SUBCATEGORIES_TABLE_NAME, null, values);
+
+            values = new ContentValues();
+            values.put(MainActivity.ANALYSIS_NAME, "Эритроциты");
+            values.put("sex", "1");
+            sqLiteDatabase.insert(MainActivity.ANALYSIS_TABLE_NAME, null, values);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
 
-    public boolean updateTask(GeoTask geoTask){
+    public String getAnalysis(){
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = null;
+        String result = "";
+        try {
+            cursor = db.query(MainActivity.ANALYSIS_TABLE_NAME, null, null, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                result = cursor.getString(cursor.getColumnIndex("1_month"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // db.close();
+        }
+        return result;
+    }
+
+
+   /* public boolean updateTask(GeoTask geoTask){
         SQLiteDatabase db = getWritableDatabase();
         try {
             ContentValues values = new ContentValues();
@@ -186,7 +228,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
        // db.close();
 
         return count > 0;
-    }
+    }*/
 
 
 }
