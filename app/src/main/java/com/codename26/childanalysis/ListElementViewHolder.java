@@ -8,9 +8,12 @@ import android.widget.TextView;
  * Created by Dell on 09.11.2017.
  */
 
-public class ListElementViewHolder extends RecyclerView.ViewHolder {
+public class
+ListElementViewHolder extends RecyclerView.ViewHolder {
     public TextView mTextView;
     public ListElementViewHolder(View itemView) {
         super(itemView);
+
+        mTextView = itemView.findViewById(R.id.textView);
     }
 }

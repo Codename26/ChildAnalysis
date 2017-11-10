@@ -51,10 +51,9 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        for (int i = 0; i < categories.size(); i++) {
-            System.out.println(categories.get(i));
-        }
 
+        RecyclerAdapter adapter = new RecyclerAdapter(this, R.layout.list_item, categories);
+        mRecyclerView.setAdapter(adapter);
 
 
 
