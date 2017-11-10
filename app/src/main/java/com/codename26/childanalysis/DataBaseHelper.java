@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     public DataBaseHelper(Context context) {
@@ -15,28 +16,40 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("PRAGMA foreign_keys=ON");
         sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.CATEGORIES_TABLE_NAME + "("
                 + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + MainActivity.CATEGORY_NAME + " TEXT NOT NULL);");
 
         sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.SUBCATEGORIES_TABLE_NAME + "("
                 + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + MainActivity.CATEGORY_ID + " INTEGER NOT NULL,"
-                + "FOREIGN KEY ("+ MainActivity.CATEGORY_ID +") REFERENCES " + MainActivity.CATEGORIES_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"),"
-                + MainActivity.SUBCATEGORY_NAME + " TEXT NOT NULL);");
+                + MainActivity.SUBCATEGORY_NAME + " TEXT NOT NULL,"
+                + MainActivity.CATEGORY_ID + " INTEGER NOT NULL, FOREIGN KEY ("+ MainActivity.CATEGORY_ID +") REFERENCES "
+                + MainActivity.CATEGORIES_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"));");
 
         sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.SUBCATEGORIES_ANALYSIS_TABLE_NAME + "("
                 + MainActivity.SUBCATEGORY_ID + " INTEGER NOT NULL,"
                 + MainActivity.ANALYSIS_ID + " INTEGER NOT NULL,"
                 + "FOREIGN KEY ("+ MainActivity.SUBCATEGORY_ID +") REFERENCES " + MainActivity.SUBCATEGORIES_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"),"
                 + "FOREIGN KEY ("+ MainActivity.ANALYSIS_ID +") REFERENCES " + MainActivity.ANALYSIS_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"));");
+
+        sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.AGE_TABLE_NAME + "("
+                + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + MainActivity.AGE_NAME + " TEXT NOT NULL);");
+
+        sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.SEX_TABLE_NAME + "("
+                + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + MainActivity.SEX_NAME + " TEXT NOT NULL);");
+
         sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.ANALYSIS_TABLE_NAME + "("
                 + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + MainActivity.ANALYSIS_NAME + " TEXT NOT NULL,"
-                + "sex INTEGER NOT NULL,"
-                + "age TEXT NOT NULL,"
-                + "index REAL NOT NULL,"
-                + "units text NOT NULL);");
+                + MainActivity.SEX + " INTEGER NOT NULL,"
+                + MainActivity.AGE + " INTEGER NOT NULL,"
+                + MainActivity.VALUE + " TEXT NOT NULL,"
+                + MainActivity.UNITS +" TEXT NOT NULL,"
+                + "FOREIGN KEY ("+ MainActivity.SEX +") REFERENCES " + MainActivity.SEX_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"),"
+                + "FOREIGN KEY ("+ MainActivity.AGE +") REFERENCES " + MainActivity.AGE_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"));");
         
         fillDB(sqLiteDatabase);
     }
@@ -45,17 +58,48 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         try {
 
                 ContentValues values = new ContentValues();
-                values.put(MainActivity.CATEGORY_NAME, "Анализ крови");
+            String[] s = {"Анализ крови", "Анализ мочи", "Печеночные пробы", "Почечные пробы", "Спермограмма"};
+            for (int i = 0; i < s.length; i++) {
+                values.put(MainActivity.CATEGORY_NAME, s[i]);
                 sqLiteDatabase.insert(MainActivity.CATEGORIES_TABLE_NAME, null, values);
+            }
 
                 values = new ContentValues();
-                values.put(MainActivity.SUBCATEGORY_NAME, "Общий Анализ крови");
-                values.put(MainActivity.CATEGORY_ID, 1);
-            sqLiteDatabase.insert(MainActivity.SUBCATEGORIES_TABLE_NAME, null, values);
+            String[] s1 = {"Общий Анализ крови", "Общий Анализ мочи", " Общий Печеночные пробы", "Общий Почечные пробы", "Общий Спермограмма"};
+            for (int i = 0; i < s1.length; i++) {
+                values.put(MainActivity.SUBCATEGORY_NAME, s1[i]);
+                values.put(MainActivity.CATEGORY_ID, i + 1);
+                sqLiteDatabase.insert(MainActivity.SUBCATEGORIES_TABLE_NAME, null, values);
+            }
+
+            values = new ContentValues();
+            values.put(MainActivity.AGE_NAME, "1 день");
+            sqLiteDatabase.insert(MainActivity.AGE_TABLE_NAME, null, values);
+            for (int i = 1; i < 5; i++) {
+                values.put(MainActivity.AGE_NAME, i + " неделя");
+                sqLiteDatabase.insert(MainActivity.AGE_TABLE_NAME, null, values);
+            }
+            for (int i = 1; i < 12; i++) {
+                values.put(MainActivity.AGE_NAME, i + " месяц");
+                sqLiteDatabase.insert(MainActivity.AGE_TABLE_NAME, null, values);
+            }
+            for (int i = 1; i < 17; i++) {
+                values.put(MainActivity.AGE_NAME, i + " год");
+                sqLiteDatabase.insert(MainActivity.AGE_TABLE_NAME, null, values);
+            }
+
+            values = new ContentValues();
+            values.put(MainActivity.SEX_NAME, "мальчик");
+            sqLiteDatabase.insert(MainActivity.SEX_TABLE_NAME, null, values);
+            values.put(MainActivity.SEX_NAME, "девочка");
+            sqLiteDatabase.insert(MainActivity.SEX_TABLE_NAME, null, values);
 
             values = new ContentValues();
             values.put(MainActivity.ANALYSIS_NAME, "Эритроциты");
-            values.put("sex", "1");
+            values.put(MainActivity.SEX, 1);
+            values.put(MainActivity.AGE, 1);
+            values.put(MainActivity.VALUE, "9.6");
+            values.put(MainActivity.UNITS, "ммоль/л");
             sqLiteDatabase.insert(MainActivity.ANALYSIS_TABLE_NAME, null, values);
         }catch (Exception e) {
             e.printStackTrace();
@@ -67,8 +111,30 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public ArrayList<String> getCategories(){
+        ArrayList<String> categoriesArray = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+        try {
+            cursor = db.query(MainActivity.CATEGORIES_TABLE_NAME, null, null, null, null, null, null);
+
+            while (cursor.moveToNext()) {
+                categoriesArray.add(cursor.getString(cursor.getColumnIndex(MainActivity.CATEGORY_NAME)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // db.close();
+        }
+
+        return categoriesArray;
+    }
+
     public String getAnalysis(){
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
         String result = "";
         try {
