@@ -2,6 +2,7 @@ package com.codename26.childanalysis;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String AGE_NAME = "age_name";
     public static final String SEX_TABLE_NAME = "sex_table";
     public static final String SEX_NAME = "sex_name";
+    public static final String CATEGORY = "category";
 
-    private ArrayList<String> categories;
+    private ArrayList<Category> categories;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DataBaseHelper helper = new DataBaseHelper(MainActivity.this);
-        categories = helper.getCategories();
+        categories = helper.getCategories(0);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -54,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerAdapter adapter = new RecyclerAdapter(this, R.layout.list_item, categories);
         mRecyclerView.setAdapter(adapter);
+
+        adapter.setItemClickListener(new RecyclerAdapter.ItemClickListener() {
+            @Override
+            public void OnItemClick(Category category) {
+                Intent intent = new Intent(MainActivity.this, SubcategoriesActivity.class);
+                intent.putExtra(MainActivity.CATEGORY, category);
+                startActivity(intent);
+            }
+        });
 
 
 

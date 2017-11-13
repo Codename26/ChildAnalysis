@@ -17,9 +17,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ListElementViewHolder>
 
     private LayoutInflater mLayoutInflater;
     private int mResource;
-    private ArrayList<String> mElements;
+    private ArrayList<Category> mElements;
 
-    public RecyclerAdapter(Context context, int resource, ArrayList<String> elements){
+    public RecyclerAdapter(Context context, int resource, ArrayList<Category> elements){
         mLayoutInflater = LayoutInflater.from(context);
         mResource = resource;
         mElements = elements;
@@ -34,11 +34,31 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ListElementViewHolder>
 
     @Override
     public void onBindViewHolder(ListElementViewHolder listElementViewHolder, int i) {
-        listElementViewHolder.mTextView.setText(mElements.get(i));
+        final Category mCategory = mElements.get(i);
+        listElementViewHolder.mTextView.setText(mCategory.getCategoryName());
+
+        if (mItemClickListener != null){
+            listElementViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mItemClickListener.OnItemClick(mCategory);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         return mElements.size();
+    }
+
+    private ItemClickListener mItemClickListener;
+
+    public void setItemClickListener(ItemClickListener listener){
+        mItemClickListener = listener;
+    }
+
+    public interface ItemClickListener{
+        void OnItemClick(Category category);
     }
 }

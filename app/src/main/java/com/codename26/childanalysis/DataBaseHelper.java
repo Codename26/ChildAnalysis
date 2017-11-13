@@ -111,37 +111,83 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<String> getCategories(){
-        ArrayList<String> categoriesArray = new ArrayList<>();
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = null;
-        try {
-            cursor = db.query(MainActivity.CATEGORIES_TABLE_NAME, null, null, null, null, null, null);
+    public ArrayList<Category> getCategories(int categoryId){
+        ArrayList<Category> categoriesArray = new ArrayList<>();
+        if (categoryId == 0) {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = null;
+            try {
+                cursor = db.query(MainActivity.CATEGORIES_TABLE_NAME, null, null, null, null, null, null);
 
-            while (cursor.moveToNext()) {
-                categoriesArray.add(cursor.getString(cursor.getColumnIndex(MainActivity.CATEGORY_NAME)));
+                while (cursor.moveToNext()) {
+                    Category mCategory = new Category();
+                    mCategory.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.CATEGORY_NAME)));
+                    mCategory.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.COLUMN_ID)));
+                    categoriesArray.add(mCategory);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+                // db.close();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
+
+            return categoriesArray;
+        } else if (categoryId > 0){
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = null;
+            try {
+                String query = MainActivity.CATEGORY_ID + " = " + categoryId;
+                cursor = db.query(MainActivity.SUBCATEGORIES_TABLE_NAME, null, query, null, null, null, null);
+
+                while (cursor.moveToNext()) {
+                    Category mCategory = new Category();
+                    mCategory.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.CATEGORY_NAME)));
+                    mCategory.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.COLUMN_ID)));
+                    mCategory.setSuperCategoryId(categoryId);
+                    categoriesArray.add(mCategory);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+                // db.close();
             }
-            // db.close();
+
+            return categoriesArray;
         }
-
         return categoriesArray;
     }
 
-    public String getAnalysis(){
+    public ArrayList<Analysis> getAnalysis(int sex, int age, int subcategoryId){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
-        String result = "";
+        ArrayList<Analysis> result = new ArrayList<>();
+        String query  = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
+                + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + ", "
+                + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.UNITS + " from " + MainActivity.ANALYSIS_TABLE_NAME
+                + " inner join " + MainActivity.SUBCATEGORIES_ANALYSIS_TABLE_NAME + " on "
+                + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.COLUMN_ID + " = "
+                + MainActivity.SUBCATEGORIES_ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID
+                + " inner join " + MainActivity.SUBCATEGORIES_TABLE_NAME + " on "
+                + MainActivity.SUBCATEGORIES_TABLE_NAME + "." + MainActivity.COLUMN_ID + " = "
+                + MainActivity.SUBCATEGORIES_ANALYSIS_TABLE_NAME + "." + MainActivity.SUBCATEGORY_ID
+                + " where " + MainActivity.SUBCATEGORIES_TABLE_NAME + "." + MainActivity.COLUMN_ID + " = " + String.valueOf(subcategoryId)
+                + " and " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.SEX + " = " + String.valueOf(sex)
+                + " and " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.AGE + " = " + String.valueOf(age) +";";
         try {
-            cursor = db.query(MainActivity.ANALYSIS_TABLE_NAME, null, null, null, null, null, null);
+            cursor = db.rawQuery(query, null);
 
-            if (cursor.moveToFirst()) {
-                result = cursor.getString(cursor.getColumnIndex("1_month"));
+            while (cursor.moveToNext()) {
+                Analysis mAnalysis = new Analysis();
+                mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
+                mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
+                mAnalysis.setAnalysisUnits(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS)));
+                result.add(mAnalysis);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,148 +199,5 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         return result;
     }
-
-
-   /* public boolean updateTask(GeoTask geoTask){
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            ContentValues values = new ContentValues();
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_NAME, geoTask.getTaskName());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_DESCRIPTION, geoTask.getTaskDescription());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_TAG, geoTask.getTaskTag());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_NOTIFICATION, geoTask.getTaskNotification());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_LATITUDE, geoTask.getTaskLatitude());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_LONGITUDE , geoTask.getTaskLongitude());
-
-            db.update(com.codename26.maptasker.GeoTask.TABLE_NAME, values, com.codename26.maptasker.GeoTask.COLUMN_ID + "=" + geoTask.getTaskId(),null);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-      //  db.close();
-
-        return false;
-    }
-
-    public long insertTask(GeoTask geoTask){
-        long id = 0;
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            ContentValues values = new ContentValues();
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_NAME, geoTask.getTaskName());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_DESCRIPTION, geoTask.getTaskDescription());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_TAG, geoTask.getTaskTag());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_NOTIFICATION, geoTask.getTaskNotification());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_LATITUDE, geoTask.getTaskLatitude());
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_LONGITUDE , geoTask.getTaskLongitude());
-
-            id = db.insert(com.codename26.maptasker.GeoTask.TABLE_NAME, null, values);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-      //  db.close();
-
-        return id;
-    }
-
-    public long newTask(){
-        long id = 0;
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            ContentValues values = new ContentValues();
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_NAME, "");
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_DESCRIPTION, "");
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_TAG, "");
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_NOTIFICATION, 0);
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_LATITUDE, 0);
-            values.put(com.codename26.maptasker.GeoTask.COLUMN_TASK_LONGITUDE , 0);
-
-            id = db.insert(com.codename26.maptasker.GeoTask.TABLE_NAME, null, values);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-      //  db.close();
-
-        return id;
-    }
-
-    public GeoTask getTask(long id){
-        SQLiteDatabase db = getWritableDatabase();
-        GeoTask geoTask = new GeoTask();
-        Cursor cursor = null;
-
-        try {
-            cursor = db.query(com.codename26.maptasker.GeoTask.TABLE_NAME, null, com.codename26.maptasker.GeoTask.COLUMN_ID + "=" + id, null, null, null, null);
-
-            if (cursor.moveToFirst()) {
-
-                    geoTask.setTaskId(cursor.getLong(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_ID)));
-                    geoTask.setTaskName(cursor.getString(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_NAME)));
-                    geoTask.setTaskDescription(cursor.getString(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_DESCRIPTION)));
-                    geoTask.setTaskTag(cursor.getString(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_TAG)));
-                    geoTask.setTaskNotification(cursor.getInt(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_NOTIFICATION)));
-                    geoTask.setTaskLatitude(cursor.getDouble(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_LATITUDE)));
-                    geoTask.setTaskLongitude(cursor.getDouble(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_LONGITUDE)));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-           // db.close();
-        }
-
-        return geoTask;
-    }
-
-    public ArrayList<GeoTask> getTasks() {
-        ArrayList<GeoTask> geoTasks = new ArrayList<>();
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = null;
-
-        try {
-            cursor = db.query(com.codename26.maptasker.GeoTask.TABLE_NAME, null, null, null, null, null, null);
-
-            if (cursor.moveToFirst()) {
-                while (!cursor.isAfterLast()) {
-                    GeoTask geoTask = new GeoTask();
-
-                    geoTask.setTaskId(cursor.getLong(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_ID)));
-                    geoTask.setTaskName(cursor.getString(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_NAME)));
-                    geoTask.setTaskDescription(cursor.getString(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_DESCRIPTION)));
-                    geoTask.setTaskTag(cursor.getString(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_TAG)));
-                    geoTask.setTaskNotification(cursor.getInt(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_NOTIFICATION)));
-                    geoTask.setTaskLatitude(cursor.getDouble(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_LATITUDE)));
-                    geoTask.setTaskLongitude(cursor.getDouble(cursor.getColumnIndex(com.codename26.maptasker.GeoTask.COLUMN_TASK_LONGITUDE)));
-                    geoTasks.add(geoTask);
-                    cursor.moveToNext();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-          //  db.close();
-        }
-        return geoTasks;
-    }
-
-    public boolean deleteTask(long id) {
-        int count = 0;
-        SQLiteDatabase db = getReadableDatabase();
-
-        try {
-            count = db.delete(com.codename26.maptasker.GeoTask.TABLE_NAME, com.codename26.maptasker.GeoTask.COLUMN_ID + "=" + id, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-       // db.close();
-
-        return count > 0;
-    }*/
-
 
 }
