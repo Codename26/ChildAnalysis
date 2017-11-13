@@ -36,13 +36,11 @@ public class SubcategoriesActivity extends AppCompatActivity {
             @Override
             public void OnItemClick(Category category) {
                 ArrayList<Analysis> mAnalyses = helper.getAnalysis(1,5, category.getCategoryId());
-                for (int i = 0; i < mAnalyses.size(); i++) {
-                    System.out.println(mAnalyses.get(i).getAnalysisName() + " **** "
-                            + mAnalyses.get(i).getAnalysisValue() + " ***** " + mAnalyses.get(i).getAnalysisUnits());
+               Intent intent = new Intent(SubcategoriesActivity.this, AnalysisActivity.class);
+               intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
+               startActivity(intent);
                 }
-
-
             }
-        });
+        );
     }
 }

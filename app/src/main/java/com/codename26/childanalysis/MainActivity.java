@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String SEX_TABLE_NAME = "sex_table";
     public static final String SEX_NAME = "sex_name";
     public static final String CATEGORY = "category";
+    public static final String ANALYSIS_ARRAY = "analysis_array";
 
     private ArrayList<Category> categories;
     private RecyclerView mRecyclerView;
