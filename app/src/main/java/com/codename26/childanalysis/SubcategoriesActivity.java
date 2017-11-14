@@ -37,7 +37,11 @@ public class SubcategoriesActivity extends AppCompatActivity {
             public void OnItemClick(Category category) {
                 ArrayList<Analysis> mAnalyses = helper.getAnalysis(1,5, category.getCategoryId());
                Intent intent = new Intent(SubcategoriesActivity.this, AnalysisActivity.class);
-               intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
+               intent.putExtra(MainActivity.EXTRA_SEX, 1);
+               intent.putExtra(MainActivity.EXTRA_AGE, 5);
+               intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, category.getCategoryId());
+
+               //intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
                startActivity(intent);
                 }
             }

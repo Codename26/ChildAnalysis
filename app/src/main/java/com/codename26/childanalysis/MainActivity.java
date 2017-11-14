@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String SEX_NAME = "sex_name";
     public static final String CATEGORY = "category";
     public static final String ANALYSIS_ARRAY = "analysis_array";
+    public static final String EXTRA_SEX = "EXTRA_SEX";
+    public static final String EXTRA_AGE = "EXTRA_AGE";
+    public static final String EXTRA_CATEGORY_ID = "EXTRA_CATEGORY_ID";
 
     private ArrayList<Category> categories;
     private RecyclerView mRecyclerView;

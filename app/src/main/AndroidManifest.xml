@@ -17,7 +17,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".SubcategoriesActivity" />
-        <activity android:name=".AnalysisActivity"></activity>
+        <activity android:name=".AnalysisActivity" />
+
+        <service
+            android:name=".DataLoaderService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
