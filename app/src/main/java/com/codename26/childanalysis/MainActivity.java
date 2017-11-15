@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -42,16 +43,23 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_SEX = "EXTRA_SEX";
     public static final String EXTRA_AGE = "EXTRA_AGE";
     public static final String EXTRA_CATEGORY_ID = "EXTRA_CATEGORY_ID";
+    public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
 
     private ArrayList<Category> categories;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    public Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
         DataBaseHelper helper = new DataBaseHelper(MainActivity.this);
         categories = helper.getCategories(0);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);

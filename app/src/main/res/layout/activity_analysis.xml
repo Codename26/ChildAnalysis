@@ -5,10 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <WebView
+<!--    <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-       android:id="@+id/webView" />
+       android:id="@+id/webView" />-->
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_analysis"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@color/actionBarTitleColor"
+
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/my_toolbar_analysis"
+        android:id="@+id/recyclerViewAnalysisActivity"></android.support.v7.widget.RecyclerView>
+
+
 </RelativeLayout>
 
 

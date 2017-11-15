@@ -1,10 +1,12 @@
 package com.codename26.childanalysis;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -13,13 +15,19 @@ public class SubcategoriesActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private Toolbar myToolbar;
+    private Category mCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subcategories);
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar_analysis);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent  = getIntent();
-      Category mCategory = intent.getParcelableExtra(MainActivity.CATEGORY);
+        mCategory = intent.getParcelableExtra(MainActivity.CATEGORY);
       final DataBaseHelper helper = new DataBaseHelper(this);
         mSubcategories = helper.getCategories(mCategory.getCategoryId());
         System.out.println(mSubcategories.toString());
@@ -31,6 +39,8 @@ public class SubcategoriesActivity extends AppCompatActivity {
 
         RecyclerAdapter adapter = new RecyclerAdapter(this, R.layout.list_item, mSubcategories);
         mRecyclerView.setAdapter(adapter);
+        initToolBar();
+
 
         adapter.setItemClickListener(new RecyclerAdapter.ItemClickListener() {
             @Override
@@ -40,11 +50,25 @@ public class SubcategoriesActivity extends AppCompatActivity {
                intent.putExtra(MainActivity.EXTRA_SEX, 1);
                intent.putExtra(MainActivity.EXTRA_AGE, 5);
                intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, category.getCategoryId());
+               intent.putExtra(MainActivity.EXTRA_CATEGORY, category);
 
                //intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
                startActivity(intent);
                 }
             }
         );
+    }
+
+    private void initToolBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+            actionBar.setDisplayShowTitleEnabled(false);
+        myToolbar.setTitle(mCategory.getCategoryName());
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

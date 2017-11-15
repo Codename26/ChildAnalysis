@@ -185,8 +185,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 Analysis mAnalysis = new Analysis();
                 mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
-                mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
-                mAnalysis.setAnalysisUnits(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS)));
+                String valueUnits = new StringBuilder().append(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)))
+                        .append(" ").append(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS))).toString();
+                mAnalysis.setAnalysisValue(valueUnits);
+                //mAnalysis.setAnalysisUnits(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS)));
                 result.add(mAnalysis);
             }
         } catch (Exception e) {
