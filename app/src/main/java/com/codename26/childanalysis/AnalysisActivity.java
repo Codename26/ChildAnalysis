@@ -2,6 +2,7 @@ package com.codename26.childanalysis;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,7 @@ public class AnalysisActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Toolbar myToolbar;
+    private ArrayList<Analysis> mAnalyses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +41,12 @@ public class AnalysisActivity extends AppCompatActivity {
         mCategoryId = intent.getIntExtra(MainActivity.EXTRA_CATEGORY_ID, 1);
         mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
 
-        DataBaseHelper helper = new DataBaseHelper(this);
-        ArrayList<Analysis> mAnalyses = helper.getAnalysis(1,5, mCategoryId);
+       // DataBaseHelper helper = new DataBaseHelper(this);
+       // ArrayList<Analysis> mAnalyses = helper.getAnalysis(1,5, mCategoryId);
 
-
+        new LoadDataTask().execute(1,5, mCategoryId);
+        initProgressDialog();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        AnalysisAdapter adapter = new AnalysisAdapter(this, R.layout.analysis_list_item, mAnalyses);
-        mRecyclerView.setAdapter(adapter);
-        initToolBar();
-
-       // initProgressDialog();
-
 
 
         //String content = arrayToString(mAnalyses);
@@ -64,6 +58,35 @@ public class AnalysisActivity extends AppCompatActivity {
                 mDialog.dismiss();
             }
         });*/
+
+    }
+
+    public class LoadDataTask extends AsyncTask<Integer, Void, ArrayList<Analysis>>{
+
+        @Override
+        protected ArrayList<Analysis> doInBackground(Integer... params) {
+            DataBaseHelper helper = new DataBaseHelper(AnalysisActivity.this);
+
+            mAnalyses = helper.getAnalysis(params[0], params[1], params[2]);
+            return mAnalyses;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Analysis> analyses) {
+            super.onPostExecute(analyses);
+            initRecyclerView();
+            mDialog.dismiss();
+        }
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        AnalysisAdapter adapter = new AnalysisAdapter(this, R.layout.analysis_list_item, mAnalyses, mRecyclerView);
+        mRecyclerView.setAdapter(adapter);
+        initToolBar();
 
     }
 

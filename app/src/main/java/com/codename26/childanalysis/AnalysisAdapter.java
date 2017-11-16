@@ -2,6 +2,7 @@ package com.codename26.childanalysis;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import com.transitionseverywhere.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,15 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     private LayoutInflater mLayoutInflater;
     private int mResource;
     private ArrayList<Analysis> mElements;
+    private int mExpandedPosition = -1;
+    private ViewGroup mViewGroup;
 
 
-    public AnalysisAdapter(Context context, int resource, ArrayList<Analysis> elements){
+    public AnalysisAdapter(Context context, int resource, ArrayList<Analysis> elements, ViewGroup viewGroup){
         mLayoutInflater = LayoutInflater.from(context);
         mResource = resource;
         mElements = elements;
-
+        mViewGroup = viewGroup;
     }
 
     @Override
@@ -33,19 +36,33 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, int i) {
-        final Analysis mAnalysis = mElements.get(i);
+    public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, final int position) {
+        final Analysis mAnalysis = mElements.get(position);
         analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
         analysisViewHolder.mTextViewAnalysisValue.setText(mAnalysis.getAnalysisValue());
 
-        if (mItemClickListener != null){
+        //Google IO Expandable animation
+        final boolean isExpanded = position==mExpandedPosition;
+        analysisViewHolder.details.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        analysisViewHolder.itemView.setActivated(isExpanded);
+        analysisViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mExpandedPosition = isExpanded ? -1:position;
+              // TransitionManager.beginDelayedTransition(mViewGroup);
+                notifyDataSetChanged();
+            }
+        });
+
+
+       /* if (mItemClickListener != null){
             analysisViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mItemClickListener.OnItemClick(mAnalysis);
                 }
             });
-        }
+        }*/
 
     }
 
