@@ -202,4 +202,63 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public ArrayList<SearchResult> search(String query) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+        ArrayList<SearchResult> searchResult = new ArrayList<>();
+
+        try {
+            cursor = db.query(MainActivity.ANALYSIS_TABLE_NAME, new String[]{MainActivity.ANALYSIS_NAME, MainActivity.COLUMN_ID},
+                    MainActivity.ANALYSIS_NAME + " LIKE ?", new String[] { "%"+query+"%" }, null, null, null);
+            SearchResult mSearchResult = new SearchResult();
+            while (cursor.moveToNext()) {
+                String categorySearchQuery = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
+                        + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.COLUMN_ID + ", "
+                        + MainActivity.SUBCATEGORIES_TABLE_NAME + "." + MainActivity.COLUMN_ID + ", "
+                        + MainActivity.SUBCATEGORIES_TABLE_NAME + "." + MainActivity.SUBCATEGORY_NAME + " from " + MainActivity.ANALYSIS_TABLE_NAME
+                        + " inner join " + MainActivity.SUBCATEGORIES_ANALYSIS_TABLE_NAME + " on "
+                        + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.COLUMN_ID + " = "
+                        + MainActivity.SUBCATEGORIES_ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID
+                        + " inner join " + MainActivity.SUBCATEGORIES_TABLE_NAME + " on "
+                        + MainActivity.SUBCATEGORIES_TABLE_NAME + "." + MainActivity.COLUMN_ID + " = "
+                        + MainActivity.SUBCATEGORIES_ANALYSIS_TABLE_NAME + "." + MainActivity.SUBCATEGORY_ID
+                        + " where " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.COLUMN_ID + " = " + cursor.getString(cursor.getColumnIndex(MainActivity.COLUMN_ID))
+                        +";";;
+                try {
+                    Cursor categoryCursor = db.rawQuery(categorySearchQuery, null);
+                    if (categoryCursor.moveToFirst()) {
+                        mSearchResult.setAnalysisId(cursor.getInt(cursor.getColumnIndex(MainActivity.COLUMN_ID)));
+                        mSearchResult.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
+                     //   mSearchResult.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.SUBCATEGORIES_TABLE_NAME + "." + MainActivity.COLUMN_ID)));
+                      //  mSearchResult.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.SUBCATEGORY_NAME)));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (!categoryInArray(mSearchResult.getCategoryId(),  searchResult)){
+                    searchResult.add(mSearchResult);
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // db.close();
+        }
+
+
+        return searchResult;
+    }
+
+    private boolean categoryInArray(int categoryId, ArrayList<SearchResult> arrayList){
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (categoryId == arrayList.get(i).getCategoryId()){
+                return true;
+            }
+        }
+        return false;
+    }
 }
