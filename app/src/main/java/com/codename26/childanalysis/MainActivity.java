@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_AGE = "EXTRA_AGE";
     public static final String EXTRA_CATEGORY_ID = "EXTRA_CATEGORY_ID";
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
+    public static final String SUBCATEGORY_COLUMN_ID = "SUBCATEGORY_COLUMN_ID";
+    public static final String CATEGORIES_COLUMN_ID = "CATEGORIES_COLUMN_ID";
+    public static final String ANALYSIS_COLUMN_ID = "ANALYSIS_COLUMN_ID";
 
     private ArrayList<Category> categories;
     private RecyclerView mRecyclerView;

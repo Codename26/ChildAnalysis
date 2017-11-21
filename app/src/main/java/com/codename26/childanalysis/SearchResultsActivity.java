@@ -33,14 +33,17 @@ public class SearchResultsActivity extends AppCompatActivity {
             DataBaseHelper helper = new DataBaseHelper(this);
             ArrayList<SearchResult> searchResults = helper.search(query);
             for (int i = 0; i < searchResults.size(); i++) {
+            //   System.out.println(searchResults.get(i).getAnalysisName());
+                System.out.println(searchResults.get(i).getCategoryId());
+                System.out.println(searchResults.get(i).getCategoryName());
                 System.out.println(searchResults.get(i).getAnalysisName());
             }
             mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_search_results_page);
             mRecyclerView.setHasFixedSize(true);
             mLayoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(mLayoutManager);
-           // AnalysisAdapter adapter = new AnalysisAdapter(this, R.layout.analysis_list_item, searchResults, mRecyclerView);
-           // mRecyclerView.setAdapter(adapter);
+            SearchResultsAdapter adapter = new SearchResultsAdapter(this, R.layout.search_result_item, searchResults);
+            mRecyclerView.setAdapter(adapter);
 
         }
     }
