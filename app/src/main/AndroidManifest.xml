@@ -11,7 +11,8 @@
         android:theme="@style/AppTheme">
         <meta-data android:name="android.app.default_searchable"
             android:value=".activities.SearchResultsActivity"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

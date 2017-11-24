@@ -1,124 +1,22 @@
 package com.codename26.childanalysis;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
+
 import java.util.ArrayList;
-import java.util.List;
 
-public class DataBaseHelper extends SQLiteOpenHelper {
-    private Context mContext;
-    public DataBaseHelper(Context context) {
-        super(context, "analysisDB.db", null, 1);
-        mContext = context;
-    }
+/**
+ * Created by PC on 24.11.2017.
+ */
 
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("PRAGMA foreign_keys=ON");
-
-
-       /* sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.CATEGORIES_TABLE_NAME + "("
-                + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + MainActivity.CATEGORY_NAME + " TEXT NOT NULL);");
-
-        sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.SUBCATEGORIES_TABLE_NAME + "("
-                + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + MainActivity.SUBCATEGORY_NAME + " TEXT NOT NULL,"
-                + MainActivity.CATEGORY_ID + " INTEGER NOT NULL, FOREIGN KEY ("+ MainActivity.CATEGORY_ID +") REFERENCES "
-                + MainActivity.CATEGORIES_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"));");
-
-        sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.SUBCATEGORIES_ANALYSIS_TABLE_NAME + "("
-                + MainActivity.SUBCATEGORY_ID + " INTEGER NOT NULL,"
-                + MainActivity.ANALYSIS_ID + " INTEGER NOT NULL,"
-                + "FOREIGN KEY ("+ MainActivity.SUBCATEGORY_ID +") REFERENCES " + MainActivity.SUBCATEGORIES_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"),"
-                + "FOREIGN KEY ("+ MainActivity.ANALYSIS_ID +") REFERENCES " + MainActivity.ANALYSIS_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"));");
-
-        sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.AGE_TABLE_NAME + "("
-                + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + MainActivity.AGE_NAME + " TEXT NOT NULL);");
-
-        sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.SEX_TABLE_NAME + "("
-                + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + MainActivity.SEX_NAME + " TEXT NOT NULL);");
-
-        sqLiteDatabase.execSQL("CREATE TABLE " + MainActivity.ANALYSIS_TABLE_NAME + "("
-                + MainActivity.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + MainActivity.ANALYSIS_NAME + " TEXT NOT NULL,"
-                + MainActivity.SEX + " INTEGER NOT NULL,"
-                + MainActivity.AGE + " INTEGER NOT NULL,"
-                + MainActivity.VALUE + " TEXT NOT NULL,"
-                + MainActivity.UNITS +" TEXT NOT NULL,"
-                + "FOREIGN KEY ("+ MainActivity.SEX +") REFERENCES " + MainActivity.SEX_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"),"
-                + "FOREIGN KEY ("+ MainActivity.AGE +") REFERENCES " + MainActivity.AGE_TABLE_NAME + " ("+ MainActivity.COLUMN_ID +"));");
-        
-        fillDB(sqLiteDatabase);*/
-    }
-
-    private void fillDB(SQLiteDatabase sqLiteDatabase) {
-        try {
-
-                ContentValues values = new ContentValues();
-            String[] s = {"Анализ крови", "Анализ мочи", "Печеночные пробы", "Почечные пробы", "Спермограмма"};
-            for (int i = 0; i < s.length; i++) {
-                values.put(MainActivity.CATEGORY_NAME, s[i]);
-                sqLiteDatabase.insert(MainActivity.CATEGORIES_TABLE_NAME, null, values);
-            }
-
-                values = new ContentValues();
-            String[] s1 = {"Общий Анализ крови", "Общий Анализ мочи", " Общий Печеночные пробы", "Общий Почечные пробы", "Общий Спермограмма"};
-            for (int i = 0; i < s1.length; i++) {
-                values.put(MainActivity.SUBCATEGORY_NAME, s1[i]);
-                values.put(MainActivity.CATEGORY_ID, i + 1);
-                sqLiteDatabase.insert(MainActivity.SUBCATEGORIES_TABLE_NAME, null, values);
-            }
-
-            values = new ContentValues();
-            values.put(MainActivity.AGE_NAME, "1 день");
-            sqLiteDatabase.insert(MainActivity.AGE_TABLE_NAME, null, values);
-            for (int i = 1; i < 5; i++) {
-                values.put(MainActivity.AGE_NAME, i + " неделя");
-                sqLiteDatabase.insert(MainActivity.AGE_TABLE_NAME, null, values);
-            }
-            for (int i = 1; i < 12; i++) {
-                values.put(MainActivity.AGE_NAME, i + " месяц");
-                sqLiteDatabase.insert(MainActivity.AGE_TABLE_NAME, null, values);
-            }
-            for (int i = 1; i < 17; i++) {
-                values.put(MainActivity.AGE_NAME, i + " год");
-                sqLiteDatabase.insert(MainActivity.AGE_TABLE_NAME, null, values);
-            }
-
-            values = new ContentValues();
-            values.put(MainActivity.SEX_NAME, "мальчик");
-            sqLiteDatabase.insert(MainActivity.SEX_TABLE_NAME, null, values);
-            values.put(MainActivity.SEX_NAME, "девочка");
-            sqLiteDatabase.insert(MainActivity.SEX_TABLE_NAME, null, values);
-
-            values = new ContentValues();
-            values.put(MainActivity.ANALYSIS_NAME, "Эритроциты");
-            values.put(MainActivity.SEX, 1);
-            values.put(MainActivity.AGE, 1);
-            values.put(MainActivity.VALUE, "9.6");
-            values.put(MainActivity.UNITS, "ммоль/л");
-            sqLiteDatabase.insert(MainActivity.ANALYSIS_TABLE_NAME, null, values);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+public class MyDatabase extends SQLiteAssetHelper {
+    private static final String DATABASE_NAME = "analysisDB.db";
+    private static final int DATABASE_VERSION = 1;
+    public MyDatabase(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public ArrayList<Category> getCategories(int categoryId){
@@ -234,14 +132,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery(dbQuery, new String[] {"%" + query + "%"});
             SearchResult mSearchResult = new SearchResult();
             while (cursor.moveToNext()) {
-                        if (!categoryInArray(cursor.getInt(cursor.getColumnIndex(MainActivity.SUBCATEGORY_ID)), searchResult)) {
-                            mSearchResult = new SearchResult();
-                            mSearchResult.setAnalysisId(cursor.getInt(cursor.getColumnIndex(MainActivity.COLUMN_ID)));
-                            mSearchResult.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
-                            mSearchResult.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.SUBCATEGORY_ID)));
-                            mSearchResult.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.SUBCATEGORY_NAME)));
-                            searchResult.add(mSearchResult);
-                        }
+                if (!categoryInArray(cursor.getInt(cursor.getColumnIndex(MainActivity.SUBCATEGORY_ID)), searchResult)) {
+                    mSearchResult = new SearchResult();
+                    mSearchResult.setAnalysisId(cursor.getInt(cursor.getColumnIndex(MainActivity.COLUMN_ID)));
+                    mSearchResult.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
+                    mSearchResult.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.SUBCATEGORY_ID)));
+                    mSearchResult.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.SUBCATEGORY_NAME)));
+                    searchResult.add(mSearchResult);
+                }
 
 
 

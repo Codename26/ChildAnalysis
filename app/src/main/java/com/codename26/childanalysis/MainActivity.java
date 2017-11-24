@@ -18,7 +18,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -52,23 +54,28 @@ public class MainActivity extends AppCompatActivity {
     public static final String SUBCATEGORY_COLUMN_ID = "SUBCATEGORY_COLUMN_ID";
     public static final String CATEGORIES_COLUMN_ID = "CATEGORIES_COLUMN_ID";
     public static final String ANALYSIS_COLUMN_ID = "ANALYSIS_COLUMN_ID";
+    public static final String ACTION_SEARCH_RESULT = "ACTION_SEARCH_RESULT";
+    public static final String ACTION_SUBCATEGORY_ANALYSIS = "ACTION_SUBCATEGORY_ANALYSIS";
 
     private ArrayList<Category> categories;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private MyDatabase helper;
 
     public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        DataBaseHelper helper = new DataBaseHelper(MainActivity.this);
+        helper = new MyDatabase(MainActivity.this);
+      //  DataBaseHelper helper = new DataBaseHelper(MainActivity.this);
         categories = helper.getCategories(0);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -109,6 +116,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Dialog mDialog = new Dialog(MainActivity.this);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.on_back_pressed_dialog);
+        mDialog.setCancelable(true);
+        mDialog.show();
+        TextView tvExit = (TextView) mDialog.getWindow().findViewById(R.id.tvClose);
+        tvExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               finish();
+            }
+        });
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
@@ -122,5 +145,11 @@ public class MainActivity extends AppCompatActivity {
                 searchManager.getSearchableInfo(getComponentName()));
 
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        helper.close();
     }
 }

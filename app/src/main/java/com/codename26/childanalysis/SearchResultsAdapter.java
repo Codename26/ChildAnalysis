@@ -36,10 +36,29 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultViewH
         final SearchResult mSearchResult = mElements.get(i);
         searchResultViewHolder.mTextViewAnalysisName.setText(mSearchResult.getAnalysisName());
         searchResultViewHolder.mTextViewCategoryName.setText(mSearchResult.getCategoryName());
+
+        if (mItemClickListener != null){
+            searchResultViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mItemClickListener.OnItemClick(mSearchResult);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         return mElements.size();
+    }
+
+    private ItemClickListener mItemClickListener;
+
+    public void setItemClickListener(ItemClickListener listener){
+        mItemClickListener = listener;
+    }
+
+    public interface ItemClickListener{
+        void OnItemClick(SearchResult searchResult);
     }
 }

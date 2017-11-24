@@ -5,20 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.codename26.childanalysis.SearchResultsActivity">
-    <TextView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_search_results"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewSearchResults"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:gravity="center_horizontal"
-        android:textSize="20sp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@color/actionBarTitleColor"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/textViewSearchResults"
+        android:layout_below="@id/my_toolbar_search_results"
         android:layout_marginTop="8dp"
         android:id="@+id/recycler_view_search_results_page">
 
