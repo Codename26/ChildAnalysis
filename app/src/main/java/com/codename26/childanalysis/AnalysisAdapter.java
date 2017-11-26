@@ -3,6 +3,8 @@ package com.codename26.childanalysis;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import com.transitionseverywhere.TransitionManager;
+
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, final int position) {
         final Analysis mAnalysis = mElements.get(position);
         analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
-        analysisViewHolder.mTextViewAnalysisValue.setText(mAnalysis.getAnalysisValue());
+        analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue()));
 
         //Google IO Expandable animation
         final boolean isExpanded = position==mExpandedPosition;
