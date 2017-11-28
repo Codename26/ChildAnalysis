@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -29,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String CATEGORIES_TABLE_NAME = "categories";
     public static final String COLUMN_ID = "_id";
     public static final String CATEGORY_NAME = "category_name";
-    public static final String SUBCATEGORIES_TABLE_NAME = "subcategories";
+    public static final String SUBCATEGORIES_TABLE_NAME = "subcategory";
     public static final String SUBCATEGORIES_ANALYSIS_TABLE_NAME = "subcategories_analysis";
-    public static final String SUBCATEGORY_NAME = "category_name";
+    public static final String SUBCATEGORY_NAME = "subcategory_name";
     public static final String CATEGORY_ID = "category_id";
     public static final String SUBCATEGORY_ID = "subcategory_id" ;
     public static final String ANALYSIS_ID = "analysis_id";
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ANALYSIS_NAME = "analysis_name";
     public static final String SEX = "sex";
     public static final String AGE = "age";
-    public static final String VALUE = "value";
+    public static final String VALUE = "analysis_value";
     public static final String UNITS = "units";
     public static final String AGE_TABLE_NAME = "age";
     public static final String AGE_NAME = "age_name";
@@ -56,12 +57,19 @@ public class MainActivity extends AppCompatActivity {
     public static final String ANALYSIS_COLUMN_ID = "ANALYSIS_COLUMN_ID";
     public static final String ACTION_SEARCH_RESULT = "ACTION_SEARCH_RESULT";
     public static final String ACTION_SUBCATEGORY_ANALYSIS = "ACTION_SUBCATEGORY_ANALYSIS";
+    public static final String CATEGORY_HAS_SUBCATEGORIES = "has_subcategory";
+    public static final String ACTION_CATEGORY = "ACTION_CATEGORY";
+    public static final String CATEGORY_ANALYSIS_TABLE_NAME = "category_analysis";
+    private static final String ACTION_SUBCATEGORY = "ACTION_SUBCATEGORY";
+    public static final String SUBCATEGORY_TABLE_NAME = "subcategory";
+    public static String SUBCATEGORY_ANALYSIS_TABLE_NAME = "subcategory_analysis";
 
     private ArrayList<Category> categories;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private MyDatabase helper;
+    private MyDatabase mMyDatabase;
+    private DataBaseHelper helper;
 
     public Toolbar toolbar;
 
@@ -74,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        helper = new MyDatabase(MainActivity.this);
-      //  DataBaseHelper helper = new DataBaseHelper(MainActivity.this);
+        mMyDatabase =  new MyDatabase(MainActivity.this);
+        helper = new DataBaseHelper(MainActivity.this);
         categories = helper.getCategories(0);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -88,33 +96,26 @@ public class MainActivity extends AppCompatActivity {
         adapter.setItemClickListener(new RecyclerAdapter.ItemClickListener() {
             @Override
             public void OnItemClick(Category category) {
-                Intent intent = new Intent(MainActivity.this, SubcategoriesActivity.class);
-                intent.putExtra(MainActivity.CATEGORY, category);
-                startActivity(intent);
-            }
-        });
-
-
-
-       /* Button btn = (Button) findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AnalysisFragment analysisFragment = new AnalysisFragment();
-                FragmentManager fm = getSupportFragmentManager();
-                if (findViewById(R.id.fragmentContainer) != null) {
-                    fm.beginTransaction().add(R.id.fragmentContainer, analysisFragment).commit();
+                Log.d("Category_has_sub", String.valueOf(category.getHasSubcategory()));
+                if (category.getHasSubcategory() > 0) {
+                    Intent intent = new Intent(MainActivity.this, SubcategoriesActivity.class);
+                    intent.putExtra(MainActivity.EXTRA_CATEGORY, category);
+                    intent.setAction(MainActivity.ACTION_SUBCATEGORY);
+                    startActivity(intent);
+                } else if (category.getHasSubcategory() == 0) {
+                    Intent intent = new Intent(MainActivity.this, AnalysisActivity.class);
+                    Log.d("Send Category", category.getCategoryName());
+                    intent.putExtra(MainActivity.EXTRA_CATEGORY, category);
+                    intent.setAction(MainActivity.ACTION_CATEGORY);
+                    startActivity(intent);
                 }
 
-                new AgePickerDialogFragment().show(getSupportFragmentManager(), "");
-
-
             }
         });
-        */
-
     }
 
+
+    //Shows Dialog with 3 buttons when Back is pressed
     @Override
     public void onBackPressed() {
         Dialog mDialog = new Dialog(MainActivity.this);
@@ -150,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mMyDatabase.close();
         helper.close();
+
     }
 }

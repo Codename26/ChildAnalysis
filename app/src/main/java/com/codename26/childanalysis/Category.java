@@ -6,6 +6,7 @@ import android.os.Parcelable;
 public class Category implements Parcelable {
     private String mCategoryName;
     private int mCategoryId;
+    private int mHasSubcategory;
     private int mSuperCategoryId;
 
     public String getCategoryName() {
@@ -32,6 +33,14 @@ public class Category implements Parcelable {
         mSuperCategoryId = superCategoryId;
     }
 
+    public int getHasSubcategory() {
+        return mHasSubcategory;
+    }
+
+    public void setHasSubcategory(int hasSubcategory) {
+        mHasSubcategory = hasSubcategory;
+    }
+
 
     @Override
     public int describeContents() {
@@ -42,6 +51,7 @@ public class Category implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.mCategoryName);
         dest.writeInt(this.mCategoryId);
+        dest.writeInt(this.mHasSubcategory);
         dest.writeInt(this.mSuperCategoryId);
     }
 
@@ -51,6 +61,7 @@ public class Category implements Parcelable {
     protected Category(Parcel in) {
         this.mCategoryName = in.readString();
         this.mCategoryId = in.readInt();
+        this.mHasSubcategory = in.readInt();
         this.mSuperCategoryId = in.readInt();
     }
 

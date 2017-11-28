@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -34,16 +35,19 @@ public class AnalysisActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent = getIntent();
         if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
-            mSex = intent.getIntExtra(MainActivity.EXTRA_SEX, 1);
-            mAge = intent.getIntExtra(MainActivity.EXTRA_AGE, 5);
-            mCategoryId = intent.getIntExtra(MainActivity.EXTRA_CATEGORY_ID, 1);
             mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
-
-            new LoadDataTask().execute(1, 5, mCategoryId);
+            mCategoryId = mCategory.getCategoryId();
+            new LoadDataTask().execute(1, 0, mCategoryId);
         } else if (intent.getAction().equals(MainActivity.ACTION_SEARCH_RESULT)){
             mCategoryId = intent.getIntExtra(MainActivity.EXTRA_CATEGORY_ID, 1);
             mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
-            new LoadDataTask().execute(1, 1, mCategoryId);
+            new LoadDataTask().execute(0, 0, mCategoryId);
+        } else if (intent.getAction().equals(MainActivity.ACTION_CATEGORY)){
+            mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
+            mCategoryId = mCategory.getCategoryId();
+            Log.d("AnalysisActivity", mCategory.getCategoryName());
+
+            new LoadDataTask().execute(0, 0, mCategoryId);
         }
         initProgressDialog();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);

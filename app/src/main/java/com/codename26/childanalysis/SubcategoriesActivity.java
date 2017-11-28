@@ -27,7 +27,7 @@ public class SubcategoriesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent  = getIntent();
-        mCategory = intent.getParcelableExtra(MainActivity.CATEGORY);
+        mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
       final DataBaseHelper helper = new DataBaseHelper(this);
         mSubcategories = helper.getCategories(mCategory.getCategoryId());
         System.out.println(mSubcategories.toString());
@@ -47,8 +47,6 @@ public class SubcategoriesActivity extends AppCompatActivity {
             public void OnItemClick(Category category) {
                // ArrayList<Analysis> mAnalyses = helper.getAnalysis(1,5, category.getCategoryId());
                Intent intent = new Intent(SubcategoriesActivity.this, AnalysisActivity.class);
-               intent.putExtra(MainActivity.EXTRA_SEX, 1);
-               intent.putExtra(MainActivity.EXTRA_AGE, 5);
                intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, category.getCategoryId());
                intent.putExtra(MainActivity.EXTRA_CATEGORY, category);
                intent.setAction(MainActivity.ACTION_SUBCATEGORY_ANALYSIS);
