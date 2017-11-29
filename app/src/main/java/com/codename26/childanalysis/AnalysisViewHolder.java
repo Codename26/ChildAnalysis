@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.support.v4.widget.TextViewCompat;
 
 /**
  * Created by PC on 15.11.2017.

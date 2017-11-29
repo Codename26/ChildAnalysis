@@ -31,6 +31,7 @@ public class MyDatabase extends SQLiteAssetHelper {
                     Category mCategory = new Category();
                     mCategory.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.CATEGORY_NAME)));
                     mCategory.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.COLUMN_ID)));
+                    mCategory.setHasSubcategory(cursor.getInt(cursor.getColumnIndex(MainActivity.CATEGORY_HAS_SUBCATEGORIES)));
                     categoriesArray.add(mCategory);
                 }
             } catch (Exception e) {
@@ -52,8 +53,8 @@ public class MyDatabase extends SQLiteAssetHelper {
 
                 while (cursor.moveToNext()) {
                     Category mCategory = new Category();
-                    mCategory.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.CATEGORY_NAME)));
-                    mCategory.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.COLUMN_ID)));
+                    mCategory.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.SUBCATEGORY_NAME)));
+                    mCategory.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.SUBCATEGORY_ID)));
                     mCategory.setSuperCategoryId(categoryId);
                     categoriesArray.add(mCategory);
                 }

@@ -3,12 +3,13 @@ package com.codename26.childanalysis;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v4.widget.TextViewCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -67,7 +68,9 @@ public class AnalysisActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<Analysis> analyses) {
             super.onPostExecute(analyses);
             initRecyclerView();
-            mDialog.dismiss();
+            if (mDialog != null) {
+                mDialog.dismiss();
+            }
         }
     }
 

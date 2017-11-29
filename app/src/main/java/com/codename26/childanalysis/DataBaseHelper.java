@@ -186,10 +186,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + " = " + MainActivity.CATEGORY_ANALYSIS_TABLE_NAME
                     + "." + MainActivity.ANALYSIS_ID + " INNER JOIN " + MainActivity.CATEGORIES_TABLE_NAME  + " ON "
                     + MainActivity.CATEGORIES_TABLE_NAME + "." + MainActivity.COLUMN_ID + " = " + MainActivity.CATEGORY_ANALYSIS_TABLE_NAME
-                    + "." + MainActivity.CATEGORY_ID + " where " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME
+                    + "." + MainActivity.CATEGORY_ID + " where " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME_LC
                     + " LIKE ?;";
 
-            cursor = db.rawQuery(dbQuery, new String[] {"%" + query + "%"});
+            String queryLC = query.toLowerCase();
+            cursor = db.rawQuery(dbQuery, new String[] {"%" + queryLC + "%"});
             SearchResult mSearchResult = new SearchResult();
             while (cursor.moveToNext()) {
                         if (!categoryInArray(cursor.getInt(cursor.getColumnIndex(MainActivity.CATEGORY_ID)), searchResult)) {

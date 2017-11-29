@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.widget.TextViewCompat;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String CATEGORY_ANALYSIS_TABLE_NAME = "category_analysis";
     private static final String ACTION_SUBCATEGORY = "ACTION_SUBCATEGORY";
     public static final String SUBCATEGORY_TABLE_NAME = "subcategory";
+    public static final String ANALYSIS_NAME_LC = "analysis_name_lc";
     public static String SUBCATEGORY_ANALYSIS_TABLE_NAME = "subcategory_analysis";
 
     private ArrayList<Category> categories;
@@ -84,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         mMyDatabase =  new MyDatabase(MainActivity.this);
         helper = new DataBaseHelper(MainActivity.this);
-        categories = helper.getCategories(0);
+
+        categories = mMyDatabase.getCategories(0);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);

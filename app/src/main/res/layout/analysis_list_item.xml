@@ -2,10 +2,11 @@
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="8dp"
@@ -14,12 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="center_vertical"
         android:background="@drawable/comment_background"
  >
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/comment_background">
         <TextView
             android:id="@+id/tvAnalysisName"
@@ -27,8 +31,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:layout_margin="8dp"
-            android:textSize="17sp"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="13sp"
+            app:autoSizeMaxTextSize="16sp"
+            app:autoSizeStepGranularity="1sp"
             android:text="TextView" />
 
         <TextView
