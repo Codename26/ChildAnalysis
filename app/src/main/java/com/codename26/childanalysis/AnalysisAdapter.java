@@ -2,7 +2,6 @@ package com.codename26.childanalysis;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import com.transitionseverywhere.TransitionManager;
 
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -46,7 +45,6 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
 
         //Google IO Expandable animation
         final boolean isExpanded = position==mExpandedPosition;
-        analysisViewHolder.details.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         analysisViewHolder.itemView.setActivated(isExpanded);
         analysisViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
