@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Child Analysis</string>
+    <string name="app_name">Справочник анализов</string>
     <string name="choose_age">Choose Age</string>
     <string name="years">Years</string>
     <string name="months">Months</string>

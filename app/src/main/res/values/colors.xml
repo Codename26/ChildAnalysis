@@ -9,4 +9,7 @@
     <color name="colorRed">#F44336</color>
     <color name="actionBarTitleColor">#FFFFFF</color>
     <color name="analysisListItemTitle">#B2DFDB</color>
+    <color name="colorGreenPrimary">#80CBC4</color>
+    <color name="colorGreenSecondary">#4DB6AC</color>
+    <color name="blackFont">#000000</color>
 </resources>

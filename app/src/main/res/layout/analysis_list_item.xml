@@ -10,7 +10,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="8dp"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="0dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,6 +27,7 @@
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:background="@color/analysisListItemTitle"
+            android:textColor="@color/blackFont"
             android:text="TextView" />
 
         <TextView
@@ -37,7 +38,8 @@
             android:gravity="left"
             android:paddingTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="32dp"
+            android:textColor="@color/blackFont"
+            android:layout_marginLeft="16dp"
             android:text="TextView" />
 
         </LinearLayout>

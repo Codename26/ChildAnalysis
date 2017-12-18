@@ -41,7 +41,15 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, final int position) {
         final Analysis mAnalysis = mElements.get(position);
         analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
-        analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue()));
+        if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+        {
+            analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue(),Html.FROM_HTML_MODE_LEGACY));
+        }
+        else {
+            analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue()));
+        }
+
+       // analysisViewHolder.mTextViewAnalysisValue.setText(mAnalysis.getAnalysisValue());
 
         //Google IO Expandable animation
         final boolean isExpanded = position==mExpandedPosition;
