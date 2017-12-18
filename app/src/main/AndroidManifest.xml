@@ -21,8 +21,14 @@
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchResultsActivity"/>
         </activity>
-        <activity android:name=".SubcategoriesActivity" />
-        <activity android:name=".AnalysisActivity" />
+        <activity android:name=".SubcategoriesActivity" >
+        <meta-data android:name="android.app.default_searchable"
+            android:value=".SearchResultsActivity"/>
+    </activity>
+        <activity android:name=".AnalysisActivity" >
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".SearchResultsActivity"/>
+        </activity>
 
         <service
             android:name=".DataLoaderService"
