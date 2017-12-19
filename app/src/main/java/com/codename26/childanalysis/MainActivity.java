@@ -31,9 +31,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String CATEGORIES_TABLE_NAME = "categories";
     public static final String COLUMN_ID = "_id";
     public static final String CATEGORY_NAME = "category_name";
+    public static final String CATEGORY_NAME_LC = "category_name_lc";
     public static final String SUBCATEGORIES_TABLE_NAME = "subcategory";
     public static final String SUBCATEGORIES_ANALYSIS_TABLE_NAME = "subcategories_analysis";
     public static final String SUBCATEGORY_NAME = "subcategory_name";
+    public static final String SUBCATEGORY_NAME_LC = "subcategory_name_lc";
     public static final String CATEGORY_ID = "category_id";
     public static final String SUBCATEGORY_ID = "subcategory_id" ;
     public static final String ANALYSIS_ID = "analysis_id";

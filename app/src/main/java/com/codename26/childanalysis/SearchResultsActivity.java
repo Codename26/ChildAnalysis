@@ -73,6 +73,25 @@ public class SearchResultsActivity extends AppCompatActivity {
             @Override
             public void OnItemClick(SearchResult searchResult) {
                 Intent intent = new Intent(SearchResultsActivity.this, AnalysisActivity.class);
+                if (searchResult.isCategory()){
+                    intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, searchResult.getCategoryId());
+                    Category mCategory = new Category();
+                    mCategory.setCategoryName(searchResult.getCategoryName());
+                    mCategory.setCategoryId(searchResult.getCategoryId());
+                    intent.putExtra(MainActivity.EXTRA_CATEGORY, mCategory);
+                    intent.setAction(MainActivity.ACTION_SEARCH_RESULT);
+                    //intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
+                    startActivity(intent);
+                } else if (searchResult.isSubCategory()){
+                    intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, searchResult.getCategoryId());
+                    Category mCategory = new Category();
+                    mCategory.setCategoryName(searchResult.getCategoryName());
+                    mCategory.setCategoryId(searchResult.getCategoryId());
+                    intent.putExtra(MainActivity.EXTRA_CATEGORY, mCategory);
+                    intent.setAction(MainActivity.ACTION_SEARCH_RESULT);
+                    //intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
+                    startActivity(intent);
+                }
                 intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, searchResult.getCategoryId());
                 Category mCategory = new Category();
                 mCategory.setCategoryName(searchResult.getCategoryName());

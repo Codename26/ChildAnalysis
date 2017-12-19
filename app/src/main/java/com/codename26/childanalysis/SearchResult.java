@@ -12,6 +12,8 @@ public class SearchResult implements Parcelable {
     private String mAnalysisName;
     private int mCategoryId;
     private int mAnalysisId;
+    private boolean isCategory;
+    private boolean isSubCategory;
 
     public String getCategoryName() {
         return mCategoryName;
@@ -45,6 +47,22 @@ public class SearchResult implements Parcelable {
         mAnalysisId = analysisId;
     }
 
+    public boolean isCategory() {
+        return isCategory;
+    }
+
+    public void setIsCategory(boolean category) {
+        isCategory = category;
+    }
+
+    public boolean isSubCategory() {
+        return isSubCategory;
+    }
+
+    public void setIsSubCategory(boolean subCategory) {
+        isSubCategory = subCategory;
+    }
+
 
     @Override
     public int describeContents() {
@@ -57,6 +75,8 @@ public class SearchResult implements Parcelable {
         dest.writeString(this.mAnalysisName);
         dest.writeInt(this.mCategoryId);
         dest.writeInt(this.mAnalysisId);
+        dest.writeByte(this.isCategory ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isSubCategory ? (byte) 1 : (byte) 0);
     }
 
     public SearchResult() {
@@ -67,6 +87,8 @@ public class SearchResult implements Parcelable {
         this.mAnalysisName = in.readString();
         this.mCategoryId = in.readInt();
         this.mAnalysisId = in.readInt();
+        this.isCategory = in.readByte() != 0;
+        this.isSubCategory = in.readByte() != 0;
     }
 
     public static final Creator<SearchResult> CREATOR = new Creator<SearchResult>() {
