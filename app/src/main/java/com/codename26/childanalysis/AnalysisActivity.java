@@ -16,6 +16,9 @@ import android.support.v4.widget.TextViewCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,6 +33,7 @@ public class AnalysisActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private Toolbar myToolbar;
     private ArrayList<Analysis> mAnalyses;
+    private ImageView mInfoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class AnalysisActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);
     }
 
+
     public class LoadDataTask extends AsyncTask<Integer, Void, ArrayList<Analysis>>{
 
         @Override
@@ -85,6 +90,13 @@ public class AnalysisActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         AnalysisAdapter adapter = new AnalysisAdapter(this, R.layout.analysis_list_item, mAnalyses, mRecyclerView);
+        adapter.setInfoButtonClickListener(new AnalysisAdapter.InfoButtonClickListener() {
+            @Override
+            public void OnInfoButtonClick(Analysis analysis) {
+                Intent intent = new Intent(AnalysisActivity.this, WebViewActivity.class);
+                startActivity(intent);
+            }
+        });
         mRecyclerView.setAdapter(adapter);
         initToolBar();
 

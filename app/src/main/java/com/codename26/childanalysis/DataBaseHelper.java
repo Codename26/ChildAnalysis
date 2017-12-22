@@ -93,7 +93,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ArrayList<Analysis> result = new ArrayList<>();
         if (subcategory > 0) {
             String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
-                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + " from " + MainActivity.ANALYSIS_TABLE_NAME
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + ", "
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL
+                    + " from " + MainActivity.ANALYSIS_TABLE_NAME
                     + " inner join " + MainActivity.SUBCATEGORY_ANALYSIS_TABLE_NAME + " on "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + " = "
                     + MainActivity.SUBCATEGORY_ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID
@@ -122,6 +124,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     Analysis mAnalysis = new Analysis();
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
                     mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
+                    mAnalysis.setUrl(cursor.getString(cursor.getColumnIndex(MainActivity.URL)));
                     result.add(mAnalysis);
                     //mAnalysis.setAnalysisUnits(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS)));
                 }
@@ -215,6 +218,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
             // db.close();
         }
+        //Categories search
 
         try{
             String dbQuery = "select " + MainActivity.CATEGORIES_TABLE_NAME + "." + MainActivity.CATEGORY_NAME
@@ -229,6 +233,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     SearchResult mSearchResult = new SearchResult();
                     mSearchResult.setCategoryId(categoryCursor.getInt(categoryCursor.getColumnIndex(MainActivity.COLUMN_ID)));
                     mSearchResult.setCategoryName(categoryCursor.getString(categoryCursor.getColumnIndex(MainActivity.CATEGORY_NAME)));
+                    mSearchResult.setAnalysisName(mContext.getString(R.string.read_more));
                     mSearchResult.setIsCategory(true);
                     searchResult.add(mSearchResult);
                 }
@@ -243,6 +248,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
         }
 
+        //Subcategories search
+
         try{
             String dbQuery = "select " + MainActivity.SUBCATEGORIES_TABLE_NAME + "." + MainActivity.SUBCATEGORY_NAME
                     + ", " + MainActivity.SUBCATEGORIES_TABLE_NAME + "." + MainActivity.SUBCATEGORY_ID
@@ -256,6 +263,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     SearchResult mSearchResult = new SearchResult();
                     mSearchResult.setCategoryId(subcategoryCursor.getInt(subcategoryCursor.getColumnIndex(MainActivity.SUBCATEGORY_ID)));
                     mSearchResult.setCategoryName(subcategoryCursor.getString(subcategoryCursor.getColumnIndex(MainActivity.SUBCATEGORY_NAME)));
+                    mSearchResult.setAnalysisName(mContext.getString(R.string.read_more));
                     mSearchResult.setIsSubCategory(true);
                     searchResult.add(mSearchResult);
                 }

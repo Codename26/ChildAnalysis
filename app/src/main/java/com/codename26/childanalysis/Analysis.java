@@ -7,6 +7,7 @@ public class Analysis implements Parcelable {
     private String mAnalysisName;
     private String mAnalysisValue;
     private String mAnalysisUnits;
+    private String url;
     private int sex;
     private int age;
 
@@ -50,6 +51,14 @@ public class Analysis implements Parcelable {
         this.age = age;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
 
     @Override
     public int describeContents() {
@@ -61,6 +70,7 @@ public class Analysis implements Parcelable {
         dest.writeString(this.mAnalysisName);
         dest.writeString(this.mAnalysisValue);
         dest.writeString(this.mAnalysisUnits);
+        dest.writeString(this.url);
         dest.writeInt(this.sex);
         dest.writeInt(this.age);
     }
@@ -72,6 +82,7 @@ public class Analysis implements Parcelable {
         this.mAnalysisName = in.readString();
         this.mAnalysisValue = in.readString();
         this.mAnalysisUnits = in.readString();
+        this.url = in.readString();
         this.sex = in.readInt();
         this.age = in.readInt();
     }

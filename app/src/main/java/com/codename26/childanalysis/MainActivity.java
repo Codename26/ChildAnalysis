@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String ACTION_SUBCATEGORY = "ACTION_SUBCATEGORY";
     public static final String SUBCATEGORY_TABLE_NAME = "subcategory";
     public static final String ANALYSIS_NAME_LC = "analysis_name_lc";
+    public static final String URL = "analysis_url";
     public static String SUBCATEGORY_ANALYSIS_TABLE_NAME = "subcategory_analysis";
 
     private ArrayList<Category> categories;

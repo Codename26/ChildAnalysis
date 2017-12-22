@@ -79,10 +79,19 @@ public class SearchResultsActivity extends AppCompatActivity {
                     mCategory.setCategoryName(searchResult.getCategoryName());
                     mCategory.setCategoryId(searchResult.getCategoryId());
                     intent.putExtra(MainActivity.EXTRA_CATEGORY, mCategory);
-                    intent.setAction(MainActivity.ACTION_SEARCH_RESULT);
+                    intent.setAction(MainActivity.ACTION_CATEGORY);
                     //intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
                     startActivity(intent);
                 } else if (searchResult.isSubCategory()){
+                    intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, searchResult.getCategoryId());
+                    Category mCategory = new Category();
+                    mCategory.setCategoryName(searchResult.getCategoryName());
+                    mCategory.setCategoryId(searchResult.getCategoryId());
+                    intent.putExtra(MainActivity.EXTRA_CATEGORY, mCategory);
+                    intent.setAction(MainActivity.ACTION_SUBCATEGORY_ANALYSIS);
+                    //intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
+                    startActivity(intent);
+                } else {
                     intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, searchResult.getCategoryId());
                     Category mCategory = new Category();
                     mCategory.setCategoryName(searchResult.getCategoryName());
@@ -92,14 +101,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                     //intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
                     startActivity(intent);
                 }
-                intent.putExtra(MainActivity.EXTRA_CATEGORY_ID, searchResult.getCategoryId());
-                Category mCategory = new Category();
-                mCategory.setCategoryName(searchResult.getCategoryName());
-                mCategory.setCategoryId(searchResult.getCategoryId());
-                intent.putExtra(MainActivity.EXTRA_CATEGORY, mCategory);
-                intent.setAction(MainActivity.ACTION_SEARCH_RESULT);
-                //intent.putExtra(MainActivity.ANALYSIS_ARRAY, mAnalyses);
-                startActivity(intent);
             }
         });
         mRecyclerView.setAdapter(adapter);

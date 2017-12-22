@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codename26.childanalysis">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -9,25 +10,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="android.app.default_searchable"
-            android:value=".activities.SearchResultsActivity"/>
-        <activity android:name=".MainActivity"
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".activities.SearchResultsActivity" />
+
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.default_searchable"
-                android:value=".SearchResultsActivity"/>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchResultsActivity" />
         </activity>
-        <activity android:name=".SubcategoriesActivity" >
-        <meta-data android:name="android.app.default_searchable"
-            android:value=".SearchResultsActivity"/>
-    </activity>
-        <activity android:name=".AnalysisActivity" >
-            <meta-data android:name="android.app.default_searchable"
-                android:value=".SearchResultsActivity"/>
+        <activity android:name=".SubcategoriesActivity">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchResultsActivity" />
+        </activity>
+        <activity android:name=".AnalysisActivity">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchResultsActivity" />
         </activity>
 
         <service
@@ -38,11 +46,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-
         </activity>
+        <activity android:name=".WebViewActivity"></activity>
     </application>
 
 </manifest>

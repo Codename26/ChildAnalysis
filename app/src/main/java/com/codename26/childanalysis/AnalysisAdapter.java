@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.TextViewCompat;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -50,18 +52,23 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
         }
 
        // analysisViewHolder.mTextViewAnalysisValue.setText(mAnalysis.getAnalysisValue());
-
-        //Google IO Expandable animation
-        final boolean isExpanded = position==mExpandedPosition;
-        analysisViewHolder.itemView.setActivated(isExpanded);
-        analysisViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        if (mAnalysis.getUrl() != null && !mAnalysis.getUrl().equals("") ){
+            analysisViewHolder.mInfoButton.setVisibility(View.VISIBLE);
+        if (mInfoButtonClickListener != null) {
+            analysisViewHolder.mInfoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mInfoButtonClickListener.OnInfoButtonClick(mAnalysis);
+                }
+            });
+        }
+        }
+      /*  analysisViewHolder.mInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mExpandedPosition = isExpanded ? -1:position;
-              // TransitionManager.beginDelayedTransition(mViewGroup);
-                notifyDataSetChanged();
+
             }
-        });
+        });*/
 
 
        /* if (mItemClickListener != null){
@@ -81,6 +88,11 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     }
 
     private AnalysisAdapter.ItemClickListener mItemClickListener;
+    private AnalysisAdapter.InfoButtonClickListener mInfoButtonClickListener;
+
+    public void setInfoButtonClickListener(AnalysisAdapter.InfoButtonClickListener listener){
+        mInfoButtonClickListener = listener;
+    }
 
     public void setItemClickListener(AnalysisAdapter.ItemClickListener listener){
         mItemClickListener = listener;
@@ -88,5 +100,9 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
 
     public interface ItemClickListener{
         void OnItemClick(Analysis analysis);
+    }
+
+    public interface InfoButtonClickListener{
+        void OnInfoButtonClick(Analysis analysis);
     }
 }
