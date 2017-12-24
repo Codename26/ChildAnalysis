@@ -2,7 +2,6 @@ package com.codename26.childanalysis;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +9,22 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 /**
- * Created by PC on 10.11.2017.
+ * Created by User on 24.12.2017.
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<ListElementViewHolder> {
-
+public class SubcategoriesAdapter extends RecyclerView.Adapter<ListElementViewHolder> {
     private LayoutInflater mLayoutInflater;
     private int mResource;
     private ArrayList<Category> mElements;
+    private Category mSuperCategory;
     Context mContext;
 
-    public RecyclerAdapter(Context context, int resource, ArrayList<Category> elements){
+    public SubcategoriesAdapter(Context context, int resource, ArrayList<Category> elements, Category superCategory){
         mLayoutInflater = LayoutInflater.from(context);
         mResource = resource;
         mElements = elements;
         mContext = context;
+        mSuperCategory = superCategory;
 
     }
 
@@ -38,9 +38,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ListElementViewHolder>
     public void onBindViewHolder(ListElementViewHolder listElementViewHolder, int i) {
         final Category mCategory = mElements.get(i);
         listElementViewHolder.mTextView.setText(mCategory.getCategoryName());
-        if ( mCategory.getIcon() != null ) {
-            if (!mCategory.getIcon().equals("")) {
-                String iconID = mCategory.getIcon();
+        if ( mSuperCategory.getIcon() != null ) {
+            if (!mSuperCategory.getIcon().equals("")) {
+                String iconID = mSuperCategory.getIcon();
                 int resourceID = mContext.getResources().getIdentifier(iconID, "drawable",
                         mContext.getPackageName());
                 listElementViewHolder.mIcon.setImageResource(resourceID);
@@ -62,13 +62,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ListElementViewHolder>
         return mElements.size();
     }
 
-    private ItemClickListener mItemClickListener;
+    private RecyclerAdapter.ItemClickListener mItemClickListener;
 
-    public void setItemClickListener(ItemClickListener listener){
+    public void setItemClickListener(RecyclerAdapter.ItemClickListener listener){
         mItemClickListener = listener;
     }
 
     public interface ItemClickListener{
         void OnItemClick(Category category);
     }
+
 }

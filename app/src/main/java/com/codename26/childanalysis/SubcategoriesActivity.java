@@ -42,7 +42,7 @@ public class SubcategoriesActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        RecyclerAdapter adapter = new RecyclerAdapter(this, R.layout.list_item, mSubcategories);
+        SubcategoriesAdapter adapter = new SubcategoriesAdapter(this, R.layout.list_item, mSubcategories, mCategory);
         mRecyclerView.setAdapter(adapter);
         initToolBar();
 

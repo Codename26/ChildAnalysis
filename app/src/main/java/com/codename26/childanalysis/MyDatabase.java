@@ -32,6 +32,7 @@ public class MyDatabase extends SQLiteAssetHelper {
                     mCategory.setCategoryName(cursor.getString(cursor.getColumnIndex(MainActivity.CATEGORY_NAME)));
                     mCategory.setCategoryId(cursor.getInt(cursor.getColumnIndex(MainActivity.COLUMN_ID)));
                     mCategory.setHasSubcategory(cursor.getInt(cursor.getColumnIndex(MainActivity.CATEGORY_HAS_SUBCATEGORIES)));
+                    mCategory.setIcon(cursor.getString(cursor.getColumnIndex(MainActivity.CATEGORY_ICON)));
                     categoriesArray.add(mCategory);
                 }
             } catch (Exception e) {

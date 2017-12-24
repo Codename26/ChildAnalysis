@@ -123,7 +123,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 while (cursor.moveToNext()) {
                     Analysis mAnalysis = new Analysis();
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
-                    mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
+                    StringBuilder builder = new StringBuilder().append("<big>").append(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)))
+                            .append("</big>");
+                    mAnalysis.setAnalysisValue(builder.toString());
+                    Log.d("Value", builder.toString());
                     mAnalysis.setUrl(cursor.getString(cursor.getColumnIndex(MainActivity.URL)));
                     result.add(mAnalysis);
                     //mAnalysis.setAnalysisUnits(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS)));
@@ -155,7 +158,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 while (cursor.moveToNext()) {
                     Analysis mAnalysis = new Analysis();
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
-                    mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
+                    StringBuilder builder = new StringBuilder().append("<big>").append(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)))
+                            .append("</big>");
+                    mAnalysis.setAnalysisValue(builder.toString());
                     result.add(mAnalysis);
                     Log.d("Retreiving analysis", mAnalysis.getAnalysisName());
                 }

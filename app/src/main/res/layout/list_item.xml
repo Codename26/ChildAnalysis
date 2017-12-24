@@ -12,14 +12,16 @@
         card_view:cardCornerRadius="0dp">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="4dp"
+            android:layout_marginLeft="0dp"
             android:layout_weight="2"
-            android:src="@drawable/ic_8"/>
+            android:id="@+id/iv_icon" />
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
@@ -27,7 +29,7 @@
         android:textSize="20sp"
         android:textColor="@color/blackFont"
         android:layout_gravity="center_vertical"
-        android:padding="16dp"
+        android:padding="4dp"
         android:layout_weight="15"
         android:text="TextView" />
     </LinearLayout>

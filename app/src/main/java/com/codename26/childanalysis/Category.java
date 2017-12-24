@@ -8,6 +8,7 @@ public class Category implements Parcelable {
     private int mCategoryId;
     private int mHasSubcategory;
     private int mSuperCategoryId;
+    private String mIcon;
 
     public String getCategoryName() {
         return mCategoryName;
@@ -41,6 +42,14 @@ public class Category implements Parcelable {
         mHasSubcategory = hasSubcategory;
     }
 
+    public String getIcon() {
+        return mIcon;
+    }
+
+    public void setIcon(String mIcon) {
+        this.mIcon = mIcon;
+    }
+
 
     @Override
     public int describeContents() {
@@ -53,6 +62,7 @@ public class Category implements Parcelable {
         dest.writeInt(this.mCategoryId);
         dest.writeInt(this.mHasSubcategory);
         dest.writeInt(this.mSuperCategoryId);
+        dest.writeString(this.mIcon);
     }
 
     public Category() {
@@ -63,6 +73,7 @@ public class Category implements Parcelable {
         this.mCategoryId = in.readInt();
         this.mHasSubcategory = in.readInt();
         this.mSuperCategoryId = in.readInt();
+        this.mIcon = in.readString();
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
