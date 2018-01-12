@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,14 +43,26 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     @Override
     public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, final int position) {
         final Analysis mAnalysis = mElements.get(position);
+        StringBuilder builder = new StringBuilder();
         analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
-        if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+       /* if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
         {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue(),Html.FROM_HTML_MODE_LEGACY));
         }
         else {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue()));
+        }*/
+        String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
+        for (int i = 0; i < strArray.length ; i++) {
+             builder.append(strArray[i])
+                    .append("\n\n");
         }
+        analysisViewHolder.mTextViewAnalysisValue.setText(builder.toString());
+
+        for (int i = 0; i < strArray.length; i++) {
+            Log.i("+++++++++++++++", strArray[i]);
+        }
+
 
        // analysisViewHolder.mTextViewAnalysisValue.setText(mAnalysis.getAnalysisValue());
         if (mAnalysis.getUrl() != null && !mAnalysis.getUrl().equals("") ){
