@@ -4,6 +4,9 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.SuperscriptSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +46,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     @Override
     public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, final int position) {
         final Analysis mAnalysis = mElements.get(position);
-        StringBuilder builder = new StringBuilder();
+        SpannableStringBuilder builder = new SpannableStringBuilder();
         analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
        /* if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
         {
@@ -53,15 +56,11 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue()));
         }*/
         String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
-        for (int i = 0; i < strArray.length ; i++) {
-             builder.append(strArray[i])
+       for (int i = 0; i < strArray.length ; i++) {
+             builder.append(stringSupParser(strArray[i]))
                     .append("\n\n");
         }
-        analysisViewHolder.mTextViewAnalysisValue.setText(builder.toString());
-
-        for (int i = 0; i < strArray.length; i++) {
-            Log.i("+++++++++++++++", strArray[i]);
-        }
+        analysisViewHolder.mTextViewAnalysisValue.setText(builder);
 
 
        // analysisViewHolder.mTextViewAnalysisValue.setText(mAnalysis.getAnalysisValue());
@@ -117,5 +116,18 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
 
     public interface InfoButtonClickListener{
         void OnInfoButtonClick(Analysis analysis);
+    }
+
+    private SpannableStringBuilder stringSupParser(String str){
+        if (str.contains("<sup>")){
+            int index1 = str.indexOf("<sup>");
+            int index2 = str.indexOf("</sup>");
+            str = str.replace("<sup>", "");
+            str = str.replace("</sup>","");
+            SpannableStringBuilder ssb = new SpannableStringBuilder(str);
+            ssb.setSpan(new SuperscriptSpan(), index1, index2-5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return ssb;
+        }
+        return new SpannableStringBuilder(str);
     }
 }
