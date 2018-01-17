@@ -1,5 +1,6 @@
 package com.codename26.childanalysis;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,17 +12,22 @@ import android.widget.ProgressBar;
 public class WebViewActivity extends AppCompatActivity {
     private WebView mWebView;
     private ProgressBar mProgressBar;
+    private String mUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
+        Intent intent = getIntent();
+        if (intent.hasExtra(MainActivity.WEBVIEWURL)){
+            mUrl = intent.getStringExtra(MainActivity.WEBVIEWURL);
+        }
         mWebView = findViewById(R.id.webView);
         mProgressBar = findViewById(R.id.progressBar);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new MyWebViewClient(mProgressBar));
       //  mWebView.setWebViewClient(new WebViewClient());
-        mWebView.loadUrl("https://gradusnik.net/eritrocity-krovi/");
+        mWebView.loadUrl(mUrl);
     }
 
     private class MyWebViewClient extends WebViewClient{

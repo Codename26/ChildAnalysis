@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ANALYSIS_NAME_LC = "analysis_name_lc";
     public static final String URL = "analysis_url";
     public static final String CATEGORY_ICON = "category_icon";
+    public static final String WEBVIEWURL = "web_view_url";
     public static String SUBCATEGORY_ANALYSIS_TABLE_NAME = "subcategory_analysis";
 
     private ArrayList<Category> categories;

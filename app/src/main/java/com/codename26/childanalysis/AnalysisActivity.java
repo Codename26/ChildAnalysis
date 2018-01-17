@@ -94,6 +94,7 @@ public class AnalysisActivity extends AppCompatActivity {
             @Override
             public void OnInfoButtonClick(Analysis analysis) {
                 Intent intent = new Intent(AnalysisActivity.this, WebViewActivity.class);
+                intent.putExtra(MainActivity.WEBVIEWURL, analysis.getUrl());
                 startActivity(intent);
             }
         });
