@@ -123,10 +123,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 while (cursor.moveToNext()) {
                     Analysis mAnalysis = new Analysis();
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
-                    StringBuilder builder = new StringBuilder().append("<big>").append(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)))
-                            .append("</big>");
-                    mAnalysis.setAnalysisValue(builder.toString());
-                    Log.d("Value", builder.toString());
+                    mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
                     mAnalysis.setUrl(cursor.getString(cursor.getColumnIndex(MainActivity.URL)));
                     result.add(mAnalysis);
                     //mAnalysis.setAnalysisUnits(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS)));
@@ -143,7 +140,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             Log.d("Retreiving analysis", "entering correct branch");
 
             String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
-                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + " from " + MainActivity.ANALYSIS_TABLE_NAME
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + ", "
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL
+                    + " from " + MainActivity.ANALYSIS_TABLE_NAME
                     + " inner join " + MainActivity.CATEGORY_ANALYSIS_TABLE_NAME + " on "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + " = "
                     + MainActivity.CATEGORY_ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID
@@ -158,11 +157,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 while (cursor.moveToNext()) {
                     Analysis mAnalysis = new Analysis();
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
-                    StringBuilder builder = new StringBuilder().append("<big>").append(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)))
-                            .append("</big>");
-                    mAnalysis.setAnalysisValue(builder.toString());
+                    mAnalysis.setUrl(cursor.getString(cursor.getColumnIndex(MainActivity.URL)));
+                    mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
                     result.add(mAnalysis);
-                    Log.d("Retreiving analysis", mAnalysis.getAnalysisName());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

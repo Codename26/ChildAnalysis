@@ -57,8 +57,12 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
         }*/
         String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
        for (int i = 0; i < strArray.length ; i++) {
-             builder.append(stringSupParser(strArray[i]))
-                    .append("\n\n");
+           if (i != strArray.length - 1) {
+               builder.append(stringSupParser(strArray[i]))
+                       .append("\n\n");
+           } else {
+               builder.append(stringSupParser(strArray[i]));
+           }
         }
         analysisViewHolder.mTextViewAnalysisValue.setText(builder);
 
