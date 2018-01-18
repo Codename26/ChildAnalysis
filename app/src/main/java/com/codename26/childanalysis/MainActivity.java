@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.widget.TextViewCompat;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
@@ -132,10 +133,35 @@ public class MainActivity extends AppCompatActivity {
         mDialog.setCancelable(true);
         mDialog.show();
         TextView tvExit = (TextView) mDialog.getWindow().findViewById(R.id.tvClose);
+        TextView tvRate = mDialog.getWindow().findViewById(R.id.tvRateThisApp);
+        TextView tvOtherApps = mDialog.getWindow().findViewById(R.id.tvOtherApps);
         tvExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                finish();
+            }
+        });
+        tvRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            }
+        });
+        tvOtherApps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                String devName = getResources().getString(R.string.dev_name);
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://developer?id=" + devName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=" + devName)));
+                }
             }
         });
     }

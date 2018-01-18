@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 public class WebViewActivity extends AppCompatActivity {
     private WebView mWebView;
     private ProgressBar mProgressBar;
-    private String mUrl = "";
+    private String mUrl = "https://gradusnik.net";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

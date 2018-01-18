@@ -7,7 +7,8 @@
     <string name="search_hint">Поиск</string>
     <string name="search_results">Результаты поиска для:</string>
     <string name="other_apps">Другие наши приложения</string>
-    <string name="rate_app">Оценить приложение на 5;)</string>
+    <string name="rate_app">Оценить приложение на 5 ;)</string>
     <string name="close_app">Закрыть приложение</string>
     <string name="read_more">Подробнее...</string>
+    <string name="dev_name">Viacheslav Burchenko</string>
 </resources>
