@@ -7,15 +7,6 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvOtherApps"
-        android:layout_margin="12dp"
-        android:textColor="@color/cardview_light_background"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/on_back_pressed_dialog_text_size"
-        android:text="@string/other_apps" />
-
-    <TextView
         android:id="@+id/tvRateThisApp"
         android:layout_margin="12dp"
         android:textColor="@color/cardview_light_background"

@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         mDialog.show();
         TextView tvExit = (TextView) mDialog.getWindow().findViewById(R.id.tvClose);
         TextView tvRate = mDialog.getWindow().findViewById(R.id.tvRateThisApp);
-        TextView tvOtherApps = mDialog.getWindow().findViewById(R.id.tvOtherApps);
+      //  TextView tvOtherApps = mDialog.getWindow().findViewById(R.id.tvOtherApps);
         tvExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        tvOtherApps.setOnClickListener(new View.OnClickListener() {
+      /*  tvOtherApps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=" + devName)));
                 }
             }
-        });
+        });*/
     }
 
     @Override
