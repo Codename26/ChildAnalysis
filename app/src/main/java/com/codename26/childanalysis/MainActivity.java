@@ -70,6 +70,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String URL = "analysis_url";
     public static final String CATEGORY_ICON = "category_icon";
     public static final String WEBVIEWURL = "web_view_url";
+    public static final String COMPLEX_ANALYSIS_TABLE_NAME = "analysis_complex";
+    public static final String COMPLEX_ANALYSIS_PARENT_ID = "parent_id";
+    public static final String COMPLEX_ANALYSIS_TEXT = "text";
+    public static final String COMPLEX_ANALYSIS_VALUE = "_value";
+    public static final String COMPLEX_ANALYSIS_UNITS = "units";
+    public static final String COMPLEX_ANALYSIS_SEX = "sex";
+    public static final String COMPLEX_ANALYSIS_GROUP = "group";
+    public static final String COMPLEX_ANALYSIS_GROUP_NAME = "group_name";
     public static String SUBCATEGORY_ANALYSIS_TABLE_NAME = "subcategory_analysis";
 
     private ArrayList<Category> categories;

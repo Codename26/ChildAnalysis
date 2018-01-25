@@ -21,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnalysisActivity extends AppCompatActivity {
+    private static final String TAG = "AnalysisActivity";
     private int mSex;
     private int mAge;
     private int mCategoryId;
@@ -33,6 +35,7 @@ public class AnalysisActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private Toolbar myToolbar;
     private ArrayList<Analysis> mAnalyses;
+    private ArrayList<ComplexAnalysis> mComplexAnalyses;
     private ImageView mInfoButton;
 
     @Override
@@ -44,7 +47,7 @@ public class AnalysisActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent = getIntent();
-        if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
+      /*  if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
             mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
             mCategoryId = mCategory.getCategoryId();
             new LoadDataTask().execute(1, 0, mCategoryId);
@@ -58,8 +61,9 @@ public class AnalysisActivity extends AppCompatActivity {
             Log.d("AnalysisActivity", mCategory.getCategoryName());
 
             new LoadDataTask().execute(0, 0, mCategoryId);
-        }
-        initProgressDialog();
+        }*/
+        new LoadComplexAnalysisTask().execute(592);
+      //  initProgressDialog();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);
     }
 
@@ -84,12 +88,103 @@ public class AnalysisActivity extends AppCompatActivity {
         }
     }
 
+    public class LoadComplexAnalysisTask extends AsyncTask<Integer, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            DataBaseHelper helper = new DataBaseHelper(AnalysisActivity.this);
+            mComplexAnalyses = helper.getComplexAnalysis(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            complexAnalysisToTable();
+        }
+    }
+
+    private void complexAnalysisToTable() {
+        mAnalyses = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+        List<ComplexAnalysis> maleAnalysis = getMaleAnalysis(mComplexAnalyses);
+        List<ComplexAnalysis> femaleAnalysis = getFemaleAnalysis(mComplexAnalyses);
+        builder.append("<html><body><table width=\"100%\"><tbody><tr bgcolor=\"#B3E5FC\">" +
+                "<td width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 1em;\">" +
+                "Мальчики</td>" +
+                "<td  width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 0.5em;\">*10<sup>12</sup>ммоль/л</td></tr>");
+        for (int i = 0; i < maleAnalysis.size(); i++) {
+            if (i % 2 == 0) {
+                builder.append("<tr bgcolor=\"#E3F2FD\">"
+                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
+                        + maleAnalysis.get(i).getText() + "</td>"
+                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
+                        + maleAnalysis.get(i).getValue() + "</td>"
+                        + "</tr>");
+            } else {
+                builder.append("<tr bgcolor=\"#B3E5FC\">"
+                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
+                        + maleAnalysis.get(i).getText() + "</td>"
+                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
+                        + maleAnalysis.get(i).getValue() + "</td>"
+                        + "</tr>");
+            }
+        }
+        builder.append("<tr bgcolor=\"#F8BBD0\">" +
+        "<td width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 1em;\">" +
+                "Девочки</td>" +
+                "<td  width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 0.5em;\">*10<sup>12</sup>ммоль/л</td></tr>");
+        for (int i = 0; i < femaleAnalysis.size(); i++) {
+            if (i % 2 == 0) {
+                builder.append("<tr bgcolor=\"#FFEBEE\">"
+                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
+                        + femaleAnalysis.get(i).getText() + "</td>"
+                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
+                        + femaleAnalysis.get(i).getValue() + "</td>"
+                        + "</tr>");
+            } else {
+                builder.append("<tr bgcolor=\"#F8BBD0\">"
+                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
+                        + femaleAnalysis.get(i).getText() + "</td>"
+                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
+                        + femaleAnalysis.get(i).getValue() + "</td>"
+                        + "</tr>");
+            }
+        }
+
+        builder.append("</tbody></table></body></html>");
+            Analysis analysis = new Analysis();
+            analysis.setAnalysisValue(builder.toString());
+            mAnalyses.add(analysis);
+       initRecyclerView();
+    }
+
+    private List<ComplexAnalysis> getFemaleAnalysis(ArrayList<ComplexAnalysis> complexAnalyses) {
+        List<ComplexAnalysis> list = new ArrayList<>();
+        for (int i = 0; i <complexAnalyses.size() ; i++) {
+            if (complexAnalyses.get(i).getSex() == 2){
+                list.add(complexAnalyses.get(i));
+            }
+        }
+        return list;
+    }
+
+    private List<ComplexAnalysis> getMaleAnalysis(ArrayList<ComplexAnalysis> complexAnalyses) {
+        List<ComplexAnalysis> list = new ArrayList<>();
+        for (int i = 0; i <complexAnalyses.size() ; i++) {
+            if (complexAnalyses.get(i).getSex() == 1){
+                list.add(complexAnalyses.get(i));
+            }
+        }
+        return list;
+    }
+
     private void initRecyclerView() {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        AnalysisAdapter adapter = new AnalysisAdapter(this, R.layout.analysis_list_item, mAnalyses, mRecyclerView);
+        AnalysisAdapter adapter = new AnalysisAdapter(this, R.layout.complex_analysis_list_item, mAnalyses, mRecyclerView);
         adapter.setInfoButtonClickListener(new AnalysisAdapter.InfoButtonClickListener() {
             @Override
             public void OnInfoButtonClick(Analysis analysis) {
@@ -114,7 +209,8 @@ public class AnalysisActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
-        myToolbar.setTitle(mCategory.getCategoryName());
+//        myToolbar.setTitle(mCategory.getCategoryName());
+        myToolbar.setTitle("Общий анализ крови у детей");
     }
 
     @Override

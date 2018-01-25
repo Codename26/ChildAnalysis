@@ -47,7 +47,9 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, final int position) {
         final Analysis mAnalysis = mElements.get(position);
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
+        //analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
+        analysisViewHolder.mTextViewAnalysisName.setText("Эритроциты");
+        analysisViewHolder.mWebView.loadDataWithBaseURL(null, mAnalysis.getAnalysisValue(),"text/html", "UTF-8", null);
        /* if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
         {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue(),Html.FROM_HTML_MODE_LEGACY));
@@ -55,7 +57,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
         else {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue()));
         }*/
-        String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
+      /*  String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
        for (int i = 0; i < strArray.length ; i++) {
            if (i != strArray.length - 1) {
                builder.append(stringSupParser(strArray[i]))
@@ -64,7 +66,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
                builder.append(stringSupParser(strArray[i]));
            }
         }
-        analysisViewHolder.mTextViewAnalysisValue.setText(builder);
+        analysisViewHolder.mTextViewAnalysisValue.setText(builder);*/
 
 
        // analysisViewHolder.mTextViewAnalysisValue.setText(mAnalysis.getAnalysisValue());
