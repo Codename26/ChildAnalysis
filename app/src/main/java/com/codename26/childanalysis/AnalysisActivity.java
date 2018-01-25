@@ -21,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnalysisActivity extends AppCompatActivity {
+    private static final String TAG = "AnalysisActivity";
     private int mSex;
     private int mAge;
     private int mCategoryId;
@@ -32,8 +34,9 @@ public class AnalysisActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Toolbar myToolbar;
-    private ArrayList<Analysis> mAnalyses;
+    private ArrayList<ComplexAnalysis> mAnalyses;
     private ImageView mInfoButton;
+    private  DataBaseHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,9 @@ public class AnalysisActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mHelper = new DataBaseHelper(AnalysisActivity.this);
         Intent intent = getIntent();
-        if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
+       /* if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
             mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
             mCategoryId = mCategory.getCategoryId();
             new LoadDataTask().execute(1, 0, mCategoryId);
@@ -58,24 +62,23 @@ public class AnalysisActivity extends AppCompatActivity {
             Log.d("AnalysisActivity", mCategory.getCategoryName());
 
             new LoadDataTask().execute(0, 0, mCategoryId);
-        }
+        }*/
+        new LoadDataTask().execute(592);
         initProgressDialog();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);
     }
 
 
-    public class LoadDataTask extends AsyncTask<Integer, Void, ArrayList<Analysis>>{
-
+    public class LoadDataTask extends AsyncTask<Integer, Void, ArrayList<ComplexAnalysis>>{
         @Override
-        protected ArrayList<Analysis> doInBackground(Integer... params) {
-            DataBaseHelper helper = new DataBaseHelper(AnalysisActivity.this);
-
-            mAnalyses = helper.getAnalysis(params[0], params[1], params[2]);
+        protected ArrayList<ComplexAnalysis> doInBackground(Integer... params) {
+            //mAnalyses = mHelper.getAnalysis(params[0], params[1], params[2]);
+            mAnalyses = mHelper.getComplexAnalysis(params[0]);
             return mAnalyses;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Analysis> analyses) {
+        protected void onPostExecute(ArrayList<ComplexAnalysis> analyses) {
             super.onPostExecute(analyses);
             initRecyclerView();
             if (mDialog != null) {
@@ -114,7 +117,7 @@ public class AnalysisActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
-        myToolbar.setTitle(mCategory.getCategoryName());
+//        myToolbar.setTitle(mCategory.getCategoryName());
     }
 
     @Override
@@ -137,5 +140,11 @@ public class AnalysisActivity extends AppCompatActivity {
                 searchManager.getSearchableInfo(getComponentName()));
 
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        mHelper.close();
+        super.onDestroy();
     }
 }

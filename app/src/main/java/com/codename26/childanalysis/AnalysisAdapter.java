@@ -17,20 +17,16 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by PC on 15.11.2017.
- */
-
 public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
 
     private LayoutInflater mLayoutInflater;
     private int mResource;
-    private ArrayList<Analysis> mElements;
+    private ArrayList<ComplexAnalysis> mElements;
     private int mExpandedPosition = -1;
     private ViewGroup mViewGroup;
 
 
-    public AnalysisAdapter(Context context, int resource, ArrayList<Analysis> elements, ViewGroup viewGroup){
+    public AnalysisAdapter(Context context, int resource, ArrayList<ComplexAnalysis> elements, ViewGroup viewGroup){
         mLayoutInflater = LayoutInflater.from(context);
         mResource = resource;
         mElements = elements;
@@ -45,9 +41,9 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
 
     @Override
     public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, final int position) {
-        final Analysis mAnalysis = mElements.get(position);
+        final ComplexAnalysis mAnalysis = mElements.get(position);
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
+        analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getText());
        /* if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
         {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue(),Html.FROM_HTML_MODE_LEGACY));
@@ -55,7 +51,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
         else {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue()));
         }*/
-        String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
+     /*   String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
        for (int i = 0; i < strArray.length ; i++) {
            if (i != strArray.length - 1) {
                builder.append(stringSupParser(strArray[i]))
@@ -78,7 +74,8 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
                 }
             });
         }
-        }
+        }*/
+
       /*  analysisViewHolder.mInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

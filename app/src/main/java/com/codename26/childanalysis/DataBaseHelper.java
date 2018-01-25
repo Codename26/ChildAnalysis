@@ -291,4 +291,37 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         return false;
     }
+
+    public ArrayList<ComplexAnalysis> getComplexAnalysis(int analysisId){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+        ArrayList<ComplexAnalysis> result = new ArrayList<>();
+        if (analysisId > 0) {
+            String query = "select * from "
+                    + MainActivity.COMPLEX_ANALYSIS_TABLE_NAME
+                    + " where " + MainActivity.COMPLEX_ANALYSIS_PARENT_ID + " = " + String.valueOf(analysisId) + ";";
+
+            try {
+                cursor = db.rawQuery(query, null);
+
+                while (cursor.moveToNext()) {
+                    ComplexAnalysis mComplexAnalysis = new ComplexAnalysis();
+                    mComplexAnalysis.setText(cursor.getString(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_TEXT)));
+                    mComplexAnalysis.setValue(cursor.getString(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_VALUE)));
+                    mComplexAnalysis.setUnits(cursor.getString(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_UNITS)));
+                    mComplexAnalysis.setSex(cursor.getInt(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_SEX)));
+                    mComplexAnalysis.setGroup(cursor.getInt(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_GROUP)));
+                    mComplexAnalysis.setGroupName(cursor.getString(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_GROUP_NAME)));
+                    result.add(mComplexAnalysis);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        return result;
+    }
 }
