@@ -47,7 +47,7 @@ public class AnalysisActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent = getIntent();
-      /*  if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
+        if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
             mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
             mCategoryId = mCategory.getCategoryId();
             new LoadDataTask().execute(1, 0, mCategoryId);
@@ -61,8 +61,8 @@ public class AnalysisActivity extends AppCompatActivity {
             Log.d("AnalysisActivity", mCategory.getCategoryName());
 
             new LoadDataTask().execute(0, 0, mCategoryId);
-        }*/
-        new LoadComplexAnalysisTask().execute(592);
+        }
+
       //  initProgressDialog();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);
     }
@@ -85,10 +85,15 @@ public class AnalysisActivity extends AppCompatActivity {
             if (mDialog != null) {
                 mDialog.dismiss();
             }
+            for (int i = 0; i < mAnalyses.size(); i++) {
+               mAnalyses.get(i).setAnalysisValue(complexAnalysisToTable(mAnalyses.get(i).getComplexAnalysisList()));
+            }
+
+
         }
     }
 
-    public class LoadComplexAnalysisTask extends AsyncTask<Integer, Void, Void>{
+   /* public class LoadComplexAnalysisTask extends AsyncTask<Integer, Void, Void>{
 
         @Override
         protected Void doInBackground(Integer... params) {
@@ -102,81 +107,87 @@ public class AnalysisActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
             complexAnalysisToTable();
         }
-    }
+    }*/
 
-    private void complexAnalysisToTable() {
+    private String complexAnalysisToTable(List<ComplexAnalysis> list) {
         mAnalyses = new ArrayList<>();
-        StringBuilder builder = new StringBuilder();
-        List<ComplexAnalysis> maleAnalysis = getMaleAnalysis(mComplexAnalyses);
-        List<ComplexAnalysis> femaleAnalysis = getFemaleAnalysis(mComplexAnalyses);
-        builder.append("<html><body><table width=\"100%\"><tbody><tr bgcolor=\"#B3E5FC\">" +
-                "<td width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 1em;\">" +
-                "Мальчики</td>" +
-                "<td  width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 0.5em;\">*10<sup>12</sup>ммоль/л</td></tr>");
-        for (int i = 0; i < maleAnalysis.size(); i++) {
-            if (i % 2 == 0) {
-                builder.append("<tr bgcolor=\"#E3F2FD\">"
-                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
-                        + maleAnalysis.get(i).getText() + "</td>"
-                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
-                        + maleAnalysis.get(i).getValue() + "</td>"
-                        + "</tr>");
-            } else {
-                builder.append("<tr bgcolor=\"#B3E5FC\">"
-                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
-                        + maleAnalysis.get(i).getText() + "</td>"
-                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
-                        + maleAnalysis.get(i).getValue() + "</td>"
-                        + "</tr>");
+        if (list != null) {
+            StringBuilder builder = new StringBuilder();
+            List<ComplexAnalysis> maleAnalysis = getMaleAnalysis(list);
+            List<ComplexAnalysis> femaleAnalysis = getFemaleAnalysis(list);
+            builder.append("<html><body><table width=\"100%\"><tbody><tr bgcolor=\"#B3E5FC\">" +
+                    "<td width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 1em;\">" +
+                    "Мальчики</td>" +
+                    "<td  width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 0.5em;\">*10<sup>12</sup>ммоль/л</td></tr>");
+            for (int i = 0; i < maleAnalysis.size(); i++) {
+                if (i % 2 == 0) {
+                    builder.append("<tr bgcolor=\"#E3F2FD\">"
+                            + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
+                            + maleAnalysis.get(i).getText() + "</td>"
+                            + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
+                            + maleAnalysis.get(i).getValue() + "</td>"
+                            + "</tr>");
+                } else {
+                    builder.append("<tr bgcolor=\"#B3E5FC\">"
+                            + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
+                            + maleAnalysis.get(i).getText() + "</td>"
+                            + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
+                            + maleAnalysis.get(i).getValue() + "</td>"
+                            + "</tr>");
+                }
             }
-        }
-        builder.append("<tr bgcolor=\"#F8BBD0\">" +
-        "<td width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 1em;\">" +
-                "Девочки</td>" +
-                "<td  width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 0.5em;\">*10<sup>12</sup>ммоль/л</td></tr>");
-        for (int i = 0; i < femaleAnalysis.size(); i++) {
-            if (i % 2 == 0) {
-                builder.append("<tr bgcolor=\"#FFEBEE\">"
-                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
-                        + femaleAnalysis.get(i).getText() + "</td>"
-                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
-                        + femaleAnalysis.get(i).getValue() + "</td>"
-                        + "</tr>");
-            } else {
-                builder.append("<tr bgcolor=\"#F8BBD0\">"
-                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
-                        + femaleAnalysis.get(i).getText() + "</td>"
-                        + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
-                        + femaleAnalysis.get(i).getValue() + "</td>"
-                        + "</tr>");
+            builder.append("<tr bgcolor=\"#F8BBD0\">" +
+                    "<td width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 1em;\">" +
+                    "Девочки</td>" +
+                    "<td  width=\"50%\" style=\"padding-bottom: 0.5em; padding-top: 0.5em; padding-left: 0.5em;\">*10<sup>12</sup>ммоль/л</td></tr>");
+            for (int i = 0; i < femaleAnalysis.size(); i++) {
+                if (i % 2 == 0) {
+                    builder.append("<tr bgcolor=\"#FFEBEE\">"
+                            + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
+                            + femaleAnalysis.get(i).getText() + "</td>"
+                            + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
+                            + femaleAnalysis.get(i).getValue() + "</td>"
+                            + "</tr>");
+                } else {
+                    builder.append("<tr bgcolor=\"#F8BBD0\">"
+                            + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 1em;\">"
+                            + femaleAnalysis.get(i).getText() + "</td>"
+                            + "<td width=\"50%\" style=\"padding-bottom: 0.12em; padding-top: 0.12em; padding-left: 0.3em;\">"
+                            + femaleAnalysis.get(i).getValue() + "</td>"
+                            + "</tr>");
+                }
             }
-        }
 
-        builder.append("</tbody></table></body></html>");
-            Analysis analysis = new Analysis();
-            analysis.setAnalysisValue(builder.toString());
-            mAnalyses.add(analysis);
-       initRecyclerView();
+            builder.append("</tbody></table></body></html>");
+            return builder.toString();
+        }
+        return null;
     }
 
-    private List<ComplexAnalysis> getFemaleAnalysis(ArrayList<ComplexAnalysis> complexAnalyses) {
-        List<ComplexAnalysis> list = new ArrayList<>();
-        for (int i = 0; i <complexAnalyses.size() ; i++) {
-            if (complexAnalyses.get(i).getSex() == 2){
-                list.add(complexAnalyses.get(i));
+    private List<ComplexAnalysis> getFemaleAnalysis(List<ComplexAnalysis> complexAnalyses) {
+        if (complexAnalyses != null) {
+            List<ComplexAnalysis> list = new ArrayList<>();
+            for (int i = 0; i < complexAnalyses.size(); i++) {
+                if (complexAnalyses.get(i).getSex() == 2) {
+                    list.add(complexAnalyses.get(i));
+                }
             }
+            return list;
         }
-        return list;
+        return null;
     }
 
-    private List<ComplexAnalysis> getMaleAnalysis(ArrayList<ComplexAnalysis> complexAnalyses) {
-        List<ComplexAnalysis> list = new ArrayList<>();
-        for (int i = 0; i <complexAnalyses.size() ; i++) {
-            if (complexAnalyses.get(i).getSex() == 1){
-                list.add(complexAnalyses.get(i));
+    private List<ComplexAnalysis> getMaleAnalysis(List<ComplexAnalysis> complexAnalyses) {
+        if (complexAnalyses != null) {
+            List<ComplexAnalysis> list = new ArrayList<>();
+            for (int i = 0; i < complexAnalyses.size(); i++) {
+                if (complexAnalyses.get(i).getSex() == 1) {
+                    list.add(complexAnalyses.get(i));
+                }
             }
+            return list;
         }
-        return list;
+        return null;
     }
 
     private void initRecyclerView() {
@@ -209,8 +220,8 @@ public class AnalysisActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
-//        myToolbar.setTitle(mCategory.getCategoryName());
-        myToolbar.setTitle("Общий анализ крови у детей");
+        myToolbar.setTitle(mCategory.getCategoryName());
+
     }
 
     @Override

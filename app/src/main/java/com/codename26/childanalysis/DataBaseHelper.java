@@ -95,6 +95,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + ", "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + ", "
                     + " from " + MainActivity.ANALYSIS_TABLE_NAME
                     + " inner join " + MainActivity.SUBCATEGORY_ANALYSIS_TABLE_NAME + " on "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + " = "
@@ -125,6 +126,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
                     mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
                     mAnalysis.setUrl(cursor.getString(cursor.getColumnIndex(MainActivity.URL)));
+                    mAnalysis.setId(cursor.getInt(cursor.getColumnIndex(MainActivity.ANALYSIS_ID)));
                     result.add(mAnalysis);
                     //mAnalysis.setAnalysisUnits(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS)));
                 }
@@ -137,11 +139,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 // db.close();
             }
         } else if (subcategory == 0 & search == 0){
-            Log.d("Retreiving analysis", "entering correct branch");
-
-            String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
+                    String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + ", "
-                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL + ", "
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID
                     + " from " + MainActivity.ANALYSIS_TABLE_NAME
                     + " inner join " + MainActivity.CATEGORY_ANALYSIS_TABLE_NAME + " on "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + " = "
@@ -159,6 +160,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
                     mAnalysis.setUrl(cursor.getString(cursor.getColumnIndex(MainActivity.URL)));
                     mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
+                    mAnalysis.setId(cursor.getInt(cursor.getColumnIndex(MainActivity.ANALYSIS_ID)));
                     result.add(mAnalysis);
                 }
             } catch (Exception e) {
@@ -169,8 +171,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 }
                 // db.close();
             }
-
-
+        }
+        for (int i = 0; i < result.size(); i++) {
+            List<ComplexAnalysis> list = new ArrayList<>();
+            list = getComplexAnalysis(result.get(i).getId());
+            if (list.size() > 0){
+                result.get(i).setComplexAnalysisList(list);
+            }
         }
         return result;
     }
@@ -299,7 +306,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (analysisId > 0) {
             String query = "select * from "
                     + MainActivity.COMPLEX_ANALYSIS_TABLE_NAME
-                    + " where " + MainActivity.COMPLEX_ANALYSIS_PARENT_ID + " = " + String.valueOf(analysisId) + ";";
+                    + " where " + MainActivity.COMPLEX_ANALYSIS_PARENT_ID + " = \"" + String.valueOf(analysisId) +"\""
+                    +";";
 
             try {
                 cursor = db.rawQuery(query, null);

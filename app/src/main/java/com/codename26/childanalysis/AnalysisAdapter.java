@@ -47,8 +47,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
     public void onBindViewHolder(AnalysisViewHolder analysisViewHolder, final int position) {
         final Analysis mAnalysis = mElements.get(position);
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        //analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
-        analysisViewHolder.mTextViewAnalysisName.setText("Эритроциты");
+        analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
         analysisViewHolder.mWebView.loadDataWithBaseURL(null, mAnalysis.getAnalysisValue(),"text/html", "UTF-8", null);
        /* if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
         {
