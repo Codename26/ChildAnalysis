@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Search;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

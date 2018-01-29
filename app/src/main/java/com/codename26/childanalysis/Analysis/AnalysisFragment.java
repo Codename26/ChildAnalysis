@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Analysis;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+
+import com.codename26.childanalysis.R;
 
 /**
  * Created by Dell on 07.11.2017.

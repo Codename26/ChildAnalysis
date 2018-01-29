@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.codename26.childanalysis.Category;
+import com.codename26.childanalysis.ListElementViewHolder;
+
 import java.util.ArrayList;
 
 /**

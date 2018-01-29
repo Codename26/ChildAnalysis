@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Analysis;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.support.v4.widget.TextViewCompat;
+
+import com.codename26.childanalysis.R;
 
 /**
  * Created by PC on 15.11.2017.

@@ -1,9 +1,13 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.DB;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.codename26.childanalysis.Analysis.Analysis;
+import com.codename26.childanalysis.Category;
+import com.codename26.childanalysis.MainActivity;
+import com.codename26.childanalysis.Search.SearchResult;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;

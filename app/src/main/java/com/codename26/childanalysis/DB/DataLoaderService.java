@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.DB;
 
 import android.app.IntentService;
 import android.content.Intent;

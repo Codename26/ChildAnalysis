@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codename26.childanalysis.SubcategoriesActivity">
+    tools:context="com.codename26.childanalysis.Subcategories.SubcategoriesActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar_search_results"
         android:layout_width="match_parent"

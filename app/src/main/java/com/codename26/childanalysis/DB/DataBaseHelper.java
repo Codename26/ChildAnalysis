@@ -1,18 +1,17 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.DB;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.util.Log;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.codename26.childanalysis.Analysis.Analysis;
+import com.codename26.childanalysis.Category;
+import com.codename26.childanalysis.Analysis.ComplexAnalysis;
+import com.codename26.childanalysis.MainActivity;
+import com.codename26.childanalysis.R;
+import com.codename26.childanalysis.Search.SearchResult;
+
 import java.util.ArrayList;
 import java.util.List;
 

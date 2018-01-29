@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Analysis;
 
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -8,17 +8,22 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.support.v4.widget.TextViewCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.Toast;
+
+import com.codename26.childanalysis.Category;
+import com.codename26.childanalysis.DB.DataBaseHelper;
+import com.codename26.childanalysis.MainActivity;
+import com.codename26.childanalysis.MultipleTypeAdapter.AnalysisModel;
+import com.codename26.childanalysis.MultipleTypeAdapter.MultipleTypeAdapter;
+import com.codename26.childanalysis.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +35,7 @@ public class AnalysisActivity extends AppCompatActivity {
     private int mCategoryId;
     private Category mCategory;
     private ProgressDialog mDialog;
-    private RecyclerView mRecyclerView;
+  //  private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Toolbar myToolbar;
@@ -46,7 +51,22 @@ public class AnalysisActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Intent intent = getIntent();
+
+        ArrayList<AnalysisModel> list = new ArrayList<>();
+        list.add(new AnalysisModel(AnalysisModel.TITLE_TYPE, "Test", "test text", "test Value", "test units"));
+        list.add(new AnalysisModel(AnalysisModel.MALE_TYPE, "Test", "test text", "test Value", "test units"));
+        list.add(new AnalysisModel(AnalysisModel.FEMALE_TYPE, "Test", "test text", "test Value", "test units"));
+        list.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE, "Test", "test text", "test Value", "test units"));
+
+        MultipleTypeAdapter adapter = new MultipleTypeAdapter(list, this);
+        LinearLayoutManager llManager = new LinearLayoutManager(this);
+
+        RecyclerView mRecyclerView = findViewById(R.id.recyclerViewAnalysisActivity);
+        mRecyclerView.setLayoutManager(llManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(adapter);
+
+       /* Intent intent = getIntent();
         if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
             mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
             mCategoryId = mCategory.getCategoryId();
@@ -64,7 +84,7 @@ public class AnalysisActivity extends AppCompatActivity {
         }
 
       //  initProgressDialog();
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);*/
     }
 
 
@@ -81,12 +101,12 @@ public class AnalysisActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Analysis> analyses) {
             super.onPostExecute(analyses);
-            initRecyclerView();
+            //initRecyclerView();
             if (mDialog != null) {
                 mDialog.dismiss();
             }
             for (int i = 0; i < mAnalyses.size(); i++) {
-               mAnalyses.get(i).setAnalysisValue(complexAnalysisToTable(mAnalyses.get(i).getComplexAnalysisList()));
+                mAnalyses.get(i).setAnalysisValue(complexAnalysisToTable(mAnalyses.get(i).getComplexAnalysisList()));
             }
 
 
@@ -190,7 +210,7 @@ public class AnalysisActivity extends AppCompatActivity {
         return null;
     }
 
-    private void initRecyclerView() {
+  /*  private void initRecyclerView() {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -207,7 +227,7 @@ public class AnalysisActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapter);
         initToolBar();
 
-    }
+    }*/
 
     private void initProgressDialog() {
         mDialog = new ProgressDialog(this);
