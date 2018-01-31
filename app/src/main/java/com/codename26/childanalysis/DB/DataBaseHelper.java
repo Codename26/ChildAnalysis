@@ -193,7 +193,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             analysisModel.setUrl(tempAnalysis.getUrl());
             analysisModel.setType(AnalysisModel.TITLE_TYPE);
             list.add(analysisModel);
-            List list1 = sortComplexAnalysisList(tempAnalysis.getComplexAnalysisList());
+            List list1 = sortComplexAnalysisList(tempAnalysis.getComplexAnalysisList(), tempAnalysis.getAnalysisName());
             for (int j = 0; j < tempAnalysis.getComplexAnalysisList().size(); j++) {
                 AnalysisModel analysisModelComplex = new AnalysisModel();
                 analysisModelComplex.setText(tempAnalysis.getComplexAnalysisList().get(j).getText());
@@ -212,7 +212,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    private List sortComplexAnalysisList(List<ComplexAnalysis> complexAnalysisList) {
+    private List sortComplexAnalysisList(List<ComplexAnalysis> complexAnalysisList, String name) {
         List list = new ArrayList();
         List listGroup1 = new ArrayList();
         List listGroup2 = new ArrayList();
@@ -238,8 +238,35 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
 
         }
+        List<AnalysisModel> listAnaltsisModel1 = addTitles(listGroup1, name);
+
 
         return list;
+    }
+
+    private List<AnalysisModel> addTitles(List<ComplexAnalysis> listGroup, String name) {
+        boolean isPrevMale = false;
+        boolean isPrevFemale = false;
+        String units = listGroup.get(0).getUnits();
+        List<AnalysisModel> listAnalysisModel = new LinkedList<>();
+       // listAnalysisModel1.add(0, new AnalysisModel(AnalysisModel.SUBTITLE_TYPE, name, listGroup1.get(0).getUnits()));
+        for (int i = 0; i < listGroup.size(); i++) {
+            if (i+1 < listGroup.size()){
+                if (listGroup.get(i).getGroup() == listGroup.get(i+1).getGroup()){
+
+                }
+            }
+            if (listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && !isPrevMale){
+                listAnalysisModel.add(i, new AnalysisModel(AnalysisModel.MALE_TYPE, listGroup.get(i).getUnits()));
+                i++;
+                isPrevMale = true;
+            }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && !isPrevFemale){
+                listAnalysisModel.add(i, new AnalysisModel(AnalysisModel.FEMALE_TYPE, listGroup.get(i).getUnits()));
+                i++;
+                isPrevFemale = true;
+            }
+        }
+        return listAnalysisModel;
     }
 
     public ArrayList<SearchResult> search(String query) {
