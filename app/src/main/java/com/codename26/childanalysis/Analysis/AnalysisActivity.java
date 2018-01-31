@@ -35,11 +35,12 @@ public class AnalysisActivity extends AppCompatActivity {
     private int mCategoryId;
     private Category mCategory;
     private ProgressDialog mDialog;
-  //  private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Toolbar myToolbar;
     private ArrayList<Analysis> mAnalyses;
+    private ArrayList<AnalysisModel> mAnalysisModels;
     private ArrayList<ComplexAnalysis> mComplexAnalyses;
     private ImageView mInfoButton;
 
@@ -52,21 +53,14 @@ public class AnalysisActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        ArrayList<AnalysisModel> list = new ArrayList<>();
+       /* ArrayList<AnalysisModel> list = new ArrayList<>();
         list.add(new AnalysisModel(AnalysisModel.TITLE_TYPE, "Test", "test text", "test Value", "test units"));
         list.add(new AnalysisModel(AnalysisModel.MALE_TYPE, "Test", "test text", "test Value", "test units"));
         list.add(new AnalysisModel(AnalysisModel.FEMALE_TYPE, "Test", "test text", "test Value", "test units"));
         list.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE, "Test", "test text", "test Value", "test units"));
+        */
 
-        MultipleTypeAdapter adapter = new MultipleTypeAdapter(list, this);
-        LinearLayoutManager llManager = new LinearLayoutManager(this);
-
-        RecyclerView mRecyclerView = findViewById(R.id.recyclerViewAnalysisActivity);
-        mRecyclerView.setLayoutManager(llManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(adapter);
-
-       /* Intent intent = getIntent();
+        Intent intent = getIntent();
         if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
             mCategory = intent.getParcelableExtra(MainActivity.EXTRA_CATEGORY);
             mCategoryId = mCategory.getCategoryId();
@@ -83,31 +77,32 @@ public class AnalysisActivity extends AppCompatActivity {
             new LoadDataTask().execute(0, 0, mCategoryId);
         }
 
-      //  initProgressDialog();
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);*/
+        initProgressDialog();
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewAnalysisActivity);
     }
 
 
-    public class LoadDataTask extends AsyncTask<Integer, Void, ArrayList<Analysis>>{
+    public class LoadDataTask extends AsyncTask<Integer, Void, ArrayList<AnalysisModel>>{
 
         @Override
-        protected ArrayList<Analysis> doInBackground(Integer... params) {
+        protected ArrayList<AnalysisModel> doInBackground(Integer... params) {
             DataBaseHelper helper = new DataBaseHelper(AnalysisActivity.this);
 
-            mAnalyses = helper.getAnalysis(params[0], params[1], params[2]);
-            return mAnalyses;
+         //  mAnalyses = helper.getAnalysis(params[0], params[1], params[2]);
+            mAnalysisModels = helper.getAnalysis(params[0], params[1], params[2]);
+            return mAnalysisModels;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Analysis> analyses) {
+        protected void onPostExecute(ArrayList<AnalysisModel> analyses) {
             super.onPostExecute(analyses);
-            //initRecyclerView();
+            initRecyclerView();
             if (mDialog != null) {
                 mDialog.dismiss();
             }
-            for (int i = 0; i < mAnalyses.size(); i++) {
+           /* for (int i = 0; i < mAnalyses.size(); i++) {
                 mAnalyses.get(i).setAnalysisValue(complexAnalysisToTable(mAnalyses.get(i).getComplexAnalysisList()));
-            }
+            }*/
 
 
         }
@@ -210,24 +205,29 @@ public class AnalysisActivity extends AppCompatActivity {
         return null;
     }
 
-  /*  private void initRecyclerView() {
-        mRecyclerView.setHasFixedSize(true);
+    private void initRecyclerView() {
+       /* mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        AnalysisAdapter adapter = new AnalysisAdapter(this, R.layout.complex_analysis_list_item, mAnalyses, mRecyclerView);
-        adapter.setInfoButtonClickListener(new AnalysisAdapter.InfoButtonClickListener() {
+        AnalysisAdapter adapter = new AnalysisAdapter(this, R.layout.complex_analysis_list_item, mAnalyses, mRecyclerView);*/
+        MultipleTypeAdapter adapter = new MultipleTypeAdapter(mAnalysisModels, this);
+        LinearLayoutManager llManager = new LinearLayoutManager(this);
+      /*  adapter.setInfoButtonClickListener(new AnalysisAdapter.InfoButtonClickListener() {
             @Override
             public void OnInfoButtonClick(Analysis analysis) {
                 Intent intent = new Intent(AnalysisActivity.this, WebViewActivity.class);
                 intent.putExtra(MainActivity.WEBVIEWURL, analysis.getUrl());
                 startActivity(intent);
             }
-        });
+        });*/
+        RecyclerView mRecyclerView = findViewById(R.id.recyclerViewAnalysisActivity);
+        mRecyclerView.setLayoutManager(llManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(adapter);
         initToolBar();
 
-    }*/
+    }
 
     private void initProgressDialog() {
         mDialog = new ProgressDialog(this);

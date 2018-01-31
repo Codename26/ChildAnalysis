@@ -1,6 +1,7 @@
 package com.codename26.childanalysis.MultipleTypeAdapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,23 +88,32 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         AnalysisModel item = mDataSet.get(position);
+        Typeface fontMontserratBold = Typeface.createFromAsset(mContext.getAssets(),  "fonts/montserrat_bold.otf");
+        Typeface fontMontserratMedium = Typeface.createFromAsset(mContext.getAssets(),  "fonts/montserrat_medium.otf");
         if (item != null){
             switch (item.getType()){
                 case AnalysisModel.TITLE_TYPE:
                     ((TitleTypeViewHolder) holder).tvName.setText(item.getName());
+                    ((TitleTypeViewHolder) holder).tvName.setTypeface(fontMontserratBold);
                     ((TitleTypeViewHolder) holder).tvUnits.setText(item.getUnits());
                     break;
                 case AnalysisModel.MALE_TYPE:
                     ((MaleTypeViewHolder) holder).tvText.setText(item.getText());
+                    ((MaleTypeViewHolder) holder).tvText.setTypeface(fontMontserratMedium);
                     ((MaleTypeViewHolder) holder).tvValue.setText(item.getValue());
+                    ((MaleTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
                     break;
                 case AnalysisModel.FEMALE_TYPE:
                     ((FemaleTypeViewHolder) holder).tvText.setText(item.getText());
+                    ((FemaleTypeViewHolder) holder).tvText.setTypeface(fontMontserratMedium);
                     ((FemaleTypeViewHolder) holder).tvValue.setText(item.getValue());
+                    ((FemaleTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
                     break;
                 case AnalysisModel.NEUTRAL_TYPE:
                     ((NeutralTypeViewHolder) holder).tvText.setText(item.getText());
+                    ((NeutralTypeViewHolder) holder).tvText.setTypeface(fontMontserratMedium);
                     ((NeutralTypeViewHolder) holder).tvValue.setText(item.getValue());
+                    ((NeutralTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
                     break;
             }
         }

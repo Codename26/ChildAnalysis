@@ -1,6 +1,7 @@
 package com.codename26.childanalysis;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -40,7 +41,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ListElementViewHolder>
     @Override
     public void onBindViewHolder(ListElementViewHolder listElementViewHolder, int i) {
         final Category mCategory = mElements.get(i);
+        Typeface fontMontserratMedium = Typeface.createFromAsset(mContext.getAssets(),  "fonts/montserrat_medium.otf");
         listElementViewHolder.mTextView.setText(mCategory.getCategoryName());
+        listElementViewHolder.mTextView.setTypeface(fontMontserratMedium);
         if ( mCategory.getIcon() != null ) {
             if (!mCategory.getIcon().equals("")) {
                 String iconID = mCategory.getIcon();

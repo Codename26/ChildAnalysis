@@ -9,10 +9,12 @@ import com.codename26.childanalysis.Analysis.Analysis;
 import com.codename26.childanalysis.Category;
 import com.codename26.childanalysis.Analysis.ComplexAnalysis;
 import com.codename26.childanalysis.MainActivity;
+import com.codename26.childanalysis.MultipleTypeAdapter.AnalysisModel;
 import com.codename26.childanalysis.R;
 import com.codename26.childanalysis.Search.SearchResult;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -86,7 +88,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return categoriesArray;
     }
 
-    public ArrayList<Analysis> getAnalysis(int subcategory, int search, int categoryId){
+    public ArrayList<AnalysisModel> getAnalysis(int subcategory, int search, int categoryId){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
         ArrayList<Analysis> result = new ArrayList<>();
@@ -178,7 +180,66 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 result.get(i).setComplexAnalysisList(list);
             }
         }
-        return result;
+        return analysisToAnalysisModel(result);
+    }
+
+    private ArrayList<AnalysisModel> analysisToAnalysisModel(ArrayList<Analysis> result) {
+        ArrayList<AnalysisModel> list = new ArrayList<>();
+        Analysis tempAnalysis;
+        for (int i = 0; i < result.size(); i++) {
+            tempAnalysis = result.get(i);
+            AnalysisModel analysisModel = new AnalysisModel();
+            analysisModel.setName(tempAnalysis.getAnalysisName());
+            analysisModel.setUrl(tempAnalysis.getUrl());
+            analysisModel.setType(AnalysisModel.TITLE_TYPE);
+            list.add(analysisModel);
+            List list1 = sortComplexAnalysisList(tempAnalysis.getComplexAnalysisList());
+            for (int j = 0; j < tempAnalysis.getComplexAnalysisList().size(); j++) {
+                AnalysisModel analysisModelComplex = new AnalysisModel();
+                analysisModelComplex.setText(tempAnalysis.getComplexAnalysisList().get(j).getText());
+                analysisModelComplex.setValue(tempAnalysis.getComplexAnalysisList().get(j).getValue());
+                analysisModelComplex.setUnits(tempAnalysis.getComplexAnalysisList().get(j).getUnits());
+                if (tempAnalysis.getComplexAnalysisList().get(j).getSex() == AnalysisModel.MALE_TYPE){
+                    analysisModelComplex.setType(AnalysisModel.MALE_TYPE);
+                } else if (tempAnalysis.getComplexAnalysisList().get(j).getSex() == AnalysisModel.FEMALE_TYPE){
+                    analysisModelComplex.setType(AnalysisModel.FEMALE_TYPE);
+                } else {
+                    analysisModelComplex.setType(AnalysisModel.NEUTRAL_TYPE);
+                }
+                list.add(analysisModelComplex);
+            }
+        }
+        return list;
+    }
+
+    private List sortComplexAnalysisList(List<ComplexAnalysis> complexAnalysisList) {
+        List list = new ArrayList();
+        List listGroup1 = new ArrayList();
+        List listGroup2 = new ArrayList();
+        List listGroup3 = new ArrayList();
+        List listMale = new ArrayList();
+        List listFemale = new LinkedList();
+        if (complexAnalysisList.get(0).getGroup() > 0){
+            for (int i = 0; i < complexAnalysisList.size(); i++) {
+                if (complexAnalysisList.get(i).getGroup() == 1){
+                    listGroup1.add(complexAnalysisList.get(i));
+                } else if (complexAnalysisList.get(i).getGroup() == 2){
+                    listGroup2.add(complexAnalysisList.get(i));
+                } else listGroup3.add(complexAnalysisList.get(i));
+            }
+        } else {
+            for (int i = 0; i < complexAnalysisList.size(); i++) {
+                if (complexAnalysisList.get(i).getSex() == 1) {
+                    listMale.add(complexAnalysisList.get(i));
+                } else if (complexAnalysisList.get(i).getSex() == 2) {
+                    listFemale.add(complexAnalysisList.get(i));
+
+                }
+            }
+
+        }
+
+        return list;
     }
 
     public ArrayList<SearchResult> search(String query) {
