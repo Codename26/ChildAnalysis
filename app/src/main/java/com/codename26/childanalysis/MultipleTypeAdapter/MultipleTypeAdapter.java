@@ -3,6 +3,7 @@ package com.codename26.childanalysis.MultipleTypeAdapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,18 +96,39 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 case AnalysisModel.TITLE_TYPE:
                     ((TitleTypeViewHolder) holder).tvName.setText(item.getName());
                     ((TitleTypeViewHolder) holder).tvName.setTypeface(fontMontserratBold);
-                    ((TitleTypeViewHolder) holder).tvUnits.setText(item.getUnits());
+
+                    if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                    {
+                        ((TitleTypeViewHolder) holder).tvUnits.setText(Html.fromHtml(item.getUnits(),Html.FROM_HTML_MODE_LEGACY));
+                    }
+                    else {
+                        ((TitleTypeViewHolder) holder).tvUnits.setText(Html.fromHtml(item.getUnits()));
+                    }
+                    ((TitleTypeViewHolder) holder).tvUnits.setTypeface(fontMontserratBold);
                     break;
                 case AnalysisModel.MALE_TYPE:
-                    ((MaleTypeViewHolder) holder).tvText.setText(item.getText());
+                   // ((MaleTypeViewHolder) holder).tvText.setText(item.getText());
                     ((MaleTypeViewHolder) holder).tvText.setTypeface(fontMontserratMedium);
-                    ((MaleTypeViewHolder) holder).tvValue.setText(item.getValue());
+                    if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                    {
+                        ((MaleTypeViewHolder) holder).tvValue.setText(Html.fromHtml(item.getUnits(),Html.FROM_HTML_MODE_LEGACY));
+                    }
+                    else {
+                        ((MaleTypeViewHolder) holder).tvValue.setText(Html.fromHtml(item.getUnits()));
+                    }
                     ((MaleTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
                     break;
                 case AnalysisModel.FEMALE_TYPE:
-                    ((FemaleTypeViewHolder) holder).tvText.setText(item.getText());
+                    //((FemaleTypeViewHolder) holder).tvText.setText(item.getText());
                     ((FemaleTypeViewHolder) holder).tvText.setTypeface(fontMontserratMedium);
-                    ((FemaleTypeViewHolder) holder).tvValue.setText(item.getValue());
+
+                    if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                    {
+                        ((FemaleTypeViewHolder) holder).tvValue.setText(Html.fromHtml(item.getUnits(),Html.FROM_HTML_MODE_LEGACY));
+                    }
+                    else {
+                        ((FemaleTypeViewHolder) holder).tvValue.setText(Html.fromHtml(item.getUnits()));
+                    }
                     ((FemaleTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
                     break;
                 case AnalysisModel.NEUTRAL_TYPE:

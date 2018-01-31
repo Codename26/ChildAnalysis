@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/tvTitleName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="6"
         android:text="TextView"
@@ -22,16 +22,17 @@
         android:layout_gravity="center_vertical"/>
     <TextView
         android:id="@+id/tvTitleUnits"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
         android:padding="8dp"
         android:textSize="16sp"
         android:gravity="center_vertical"
+        android:textColor="@color/analysisCardBackground"
         android:layout_gravity="center_vertical"
         android:text="TextView" />
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/infoButtonTitleType"
         android:layout_gravity="center_vertical"

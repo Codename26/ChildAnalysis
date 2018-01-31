@@ -4,13 +4,16 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_marginRight="4dp"
-    android:layout_marginLeft="4dp">
+    android:layout_marginLeft="4dp"
+    android:background="@color/femaleType"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
     <TextView
         android:id="@+id/tvFemaleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView"
+        android:layout_weight="2"
+        android:text="Женщины"
         android:padding="3dp"
         android:textSize="16sp"
         android:gravity="center_vertical"

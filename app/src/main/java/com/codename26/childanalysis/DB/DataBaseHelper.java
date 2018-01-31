@@ -192,9 +192,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             analysisModel.setName(tempAnalysis.getAnalysisName());
             analysisModel.setUrl(tempAnalysis.getUrl());
             analysisModel.setType(AnalysisModel.TITLE_TYPE);
+            if(tempAnalysis.getComplexAnalysisList() != null) {
+                analysisModel.setUnits(tempAnalysis.getComplexAnalysisList().get(0).getUnits());
+            }
             list.add(analysisModel);
-            List list1 = sortComplexAnalysisList(tempAnalysis.getComplexAnalysisList(), tempAnalysis.getAnalysisName());
-            for (int j = 0; j < tempAnalysis.getComplexAnalysisList().size(); j++) {
+            list.addAll(addTitles(tempAnalysis.getComplexAnalysisList(), tempAnalysis.getAnalysisName()));
+           // List list1 = sortComplexAnalysisList(tempAnalysis.getComplexAnalysisList(), tempAnalysis.getAnalysisName());
+           /* for (int j = 0; j < tempAnalysis.getComplexAnalysisList().size(); j++) {
                 AnalysisModel analysisModelComplex = new AnalysisModel();
                 analysisModelComplex.setText(tempAnalysis.getComplexAnalysisList().get(j).getText());
                 analysisModelComplex.setValue(tempAnalysis.getComplexAnalysisList().get(j).getValue());
@@ -207,64 +211,56 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     analysisModelComplex.setType(AnalysisModel.NEUTRAL_TYPE);
                 }
                 list.add(analysisModelComplex);
-            }
+            }*/
         }
-        return list;
-    }
-
-    private List sortComplexAnalysisList(List<ComplexAnalysis> complexAnalysisList, String name) {
-        List list = new ArrayList();
-        List listGroup1 = new ArrayList();
-        List listGroup2 = new ArrayList();
-        List listGroup3 = new ArrayList();
-        List listMale = new ArrayList();
-        List listFemale = new LinkedList();
-        if (complexAnalysisList.get(0).getGroup() > 0){
-            for (int i = 0; i < complexAnalysisList.size(); i++) {
-                if (complexAnalysisList.get(i).getGroup() == 1){
-                    listGroup1.add(complexAnalysisList.get(i));
-                } else if (complexAnalysisList.get(i).getGroup() == 2){
-                    listGroup2.add(complexAnalysisList.get(i));
-                } else listGroup3.add(complexAnalysisList.get(i));
-            }
-        } else {
-            for (int i = 0; i < complexAnalysisList.size(); i++) {
-                if (complexAnalysisList.get(i).getSex() == 1) {
-                    listMale.add(complexAnalysisList.get(i));
-                } else if (complexAnalysisList.get(i).getSex() == 2) {
-                    listFemale.add(complexAnalysisList.get(i));
-
-                }
-            }
-
-        }
-        List<AnalysisModel> listAnaltsisModel1 = addTitles(listGroup1, name);
-
-
         return list;
     }
 
     private List<AnalysisModel> addTitles(List<ComplexAnalysis> listGroup, String name) {
         boolean isPrevMale = false;
         boolean isPrevFemale = false;
+        int prevGroup = listGroup.get(0).getGroup();
         String units = listGroup.get(0).getUnits();
         List<AnalysisModel> listAnalysisModel = new LinkedList<>();
-       // listAnalysisModel1.add(0, new AnalysisModel(AnalysisModel.SUBTITLE_TYPE, name, listGroup1.get(0).getUnits()));
         for (int i = 0; i < listGroup.size(); i++) {
-            if (i+1 < listGroup.size()){
-                if (listGroup.get(i).getGroup() == listGroup.get(i+1).getGroup()){
+                if (listGroup.get(i).getGroup() == prevGroup){
+                    if (listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && !isPrevMale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.MALE_TYPE, listGroup.get(i).getUnits()));
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                        isPrevMale = true;
+                    }else if(listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && isPrevMale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && !isPrevFemale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.FEMALE_TYPE, listGroup.get(i).getUnits()));
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                        isPrevFemale = true;
+                    }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && isPrevFemale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    } else {
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    }
+                } else{
+                    listAnalysisModel.add(new AnalysisModel(AnalysisModel.TITLE_TYPE, name, listGroup.get(i).getUnits()));
+                    isPrevMale = false;
+                    isPrevFemale = false;
+                    if (listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && !isPrevMale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.MALE_TYPE, listGroup.get(i).getUnits()));
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                        isPrevMale = true;
+                    }else if(listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && isPrevMale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && !isPrevFemale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.FEMALE_TYPE, listGroup.get(i).getUnits()));
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                        isPrevFemale = true;
+                    }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && isPrevFemale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    } else {
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    }
 
                 }
-            }
-            if (listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && !isPrevMale){
-                listAnalysisModel.add(i, new AnalysisModel(AnalysisModel.MALE_TYPE, listGroup.get(i).getUnits()));
-                i++;
-                isPrevMale = true;
-            }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && !isPrevFemale){
-                listAnalysisModel.add(i, new AnalysisModel(AnalysisModel.FEMALE_TYPE, listGroup.get(i).getUnits()));
-                i++;
-                isPrevFemale = true;
-            }
+            prevGroup = listGroup.get(i).getGroup();
         }
         return listAnalysisModel;
     }
