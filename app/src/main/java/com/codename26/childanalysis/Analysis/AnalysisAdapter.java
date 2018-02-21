@@ -1,19 +1,14 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Analysis;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.SuperscriptSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.TextViewCompat;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -48,6 +43,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
         final Analysis mAnalysis = mElements.get(position);
         SpannableStringBuilder builder = new SpannableStringBuilder();
         analysisViewHolder.mTextViewAnalysisName.setText(mAnalysis.getAnalysisName());
+        analysisViewHolder.mWebView.loadDataWithBaseURL(null, mAnalysis.getAnalysisValue(),"text/html", "UTF-8", null);
        /* if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
         {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue(),Html.FROM_HTML_MODE_LEGACY));
@@ -55,7 +51,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
         else {
             analysisViewHolder.mTextViewAnalysisValue.setText(Html.fromHtml(mAnalysis.getAnalysisValue()));
         }*/
-        String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
+      /*  String[] strArray = mAnalysis.getAnalysisValue().split("\\<br\\>");
        for (int i = 0; i < strArray.length ; i++) {
            if (i != strArray.length - 1) {
                builder.append(stringSupParser(strArray[i]))
@@ -64,7 +60,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisViewHolder> {
                builder.append(stringSupParser(strArray[i]));
            }
         }
-        analysisViewHolder.mTextViewAnalysisValue.setText(builder);
+        analysisViewHolder.mTextViewAnalysisValue.setText(builder);*/
 
 
        // analysisViewHolder.mTextViewAnalysisValue.setText(mAnalysis.getAnalysisValue());

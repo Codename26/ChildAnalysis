@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Search;
 
 import android.os.Parcel;
 import android.os.Parcelable;

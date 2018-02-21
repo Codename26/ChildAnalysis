@@ -1,19 +1,20 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.DB;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.util.Log;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.codename26.childanalysis.Analysis.Analysis;
+import com.codename26.childanalysis.Category;
+import com.codename26.childanalysis.Analysis.ComplexAnalysis;
+import com.codename26.childanalysis.MainActivity;
+import com.codename26.childanalysis.MultipleTypeAdapter.AnalysisModel;
+import com.codename26.childanalysis.R;
+import com.codename26.childanalysis.Search.SearchResult;
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -87,7 +88,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return categoriesArray;
     }
 
-    public ArrayList<Analysis> getAnalysis(int subcategory, int search, int categoryId){
+    public ArrayList<AnalysisModel> getAnalysis(int subcategory, int search, int categoryId){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
         ArrayList<Analysis> result = new ArrayList<>();
@@ -95,6 +96,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + ", "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + ", "
                     + " from " + MainActivity.ANALYSIS_TABLE_NAME
                     + " inner join " + MainActivity.SUBCATEGORY_ANALYSIS_TABLE_NAME + " on "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + " = "
@@ -125,6 +127,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
                     mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
                     mAnalysis.setUrl(cursor.getString(cursor.getColumnIndex(MainActivity.URL)));
+                    mAnalysis.setId(cursor.getInt(cursor.getColumnIndex(MainActivity.ANALYSIS_ID)));
                     result.add(mAnalysis);
                     //mAnalysis.setAnalysisUnits(cursor.getString(cursor.getColumnIndex(MainActivity.UNITS)));
                 }
@@ -137,11 +140,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 // db.close();
             }
         } else if (subcategory == 0 & search == 0){
-            Log.d("Retreiving analysis", "entering correct branch");
-
-            String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
+                    String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + ", "
-                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL + ", "
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID
                     + " from " + MainActivity.ANALYSIS_TABLE_NAME
                     + " inner join " + MainActivity.CATEGORY_ANALYSIS_TABLE_NAME + " on "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + " = "
@@ -159,6 +161,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     mAnalysis.setAnalysisName(cursor.getString(cursor.getColumnIndex(MainActivity.ANALYSIS_NAME)));
                     mAnalysis.setUrl(cursor.getString(cursor.getColumnIndex(MainActivity.URL)));
                     mAnalysis.setAnalysisValue(cursor.getString(cursor.getColumnIndex(MainActivity.VALUE)));
+                    mAnalysis.setId(cursor.getInt(cursor.getColumnIndex(MainActivity.ANALYSIS_ID)));
                     result.add(mAnalysis);
                 }
             } catch (Exception e) {
@@ -169,10 +172,97 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 }
                 // db.close();
             }
-
-
         }
-        return result;
+        for (int i = 0; i < result.size(); i++) {
+            List<ComplexAnalysis> list = new ArrayList<>();
+            list = getComplexAnalysis(result.get(i).getId());
+            if (list.size() > 0){
+                result.get(i).setComplexAnalysisList(list);
+            }
+        }
+        return analysisToAnalysisModel(result);
+    }
+
+    private ArrayList<AnalysisModel> analysisToAnalysisModel(ArrayList<Analysis> result) {
+        ArrayList<AnalysisModel> list = new ArrayList<>();
+        Analysis tempAnalysis;
+        for (int i = 0; i < result.size(); i++) {
+            tempAnalysis = result.get(i);
+            AnalysisModel analysisModel = new AnalysisModel();
+            analysisModel.setName(tempAnalysis.getAnalysisName());
+            analysisModel.setUrl(tempAnalysis.getUrl());
+            analysisModel.setType(AnalysisModel.TITLE_TYPE);
+            if(tempAnalysis.getComplexAnalysisList() != null) {
+                analysisModel.setUnits(tempAnalysis.getComplexAnalysisList().get(0).getUnits());
+            }
+            list.add(analysisModel);
+            list.addAll(addTitles(tempAnalysis.getComplexAnalysisList(), tempAnalysis.getAnalysisName()));
+           // List list1 = sortComplexAnalysisList(tempAnalysis.getComplexAnalysisList(), tempAnalysis.getAnalysisName());
+           /* for (int j = 0; j < tempAnalysis.getComplexAnalysisList().size(); j++) {
+                AnalysisModel analysisModelComplex = new AnalysisModel();
+                analysisModelComplex.setText(tempAnalysis.getComplexAnalysisList().get(j).getText());
+                analysisModelComplex.setValue(tempAnalysis.getComplexAnalysisList().get(j).getValue());
+                analysisModelComplex.setUnits(tempAnalysis.getComplexAnalysisList().get(j).getUnits());
+                if (tempAnalysis.getComplexAnalysisList().get(j).getSex() == AnalysisModel.MALE_TYPE){
+                    analysisModelComplex.setType(AnalysisModel.MALE_TYPE);
+                } else if (tempAnalysis.getComplexAnalysisList().get(j).getSex() == AnalysisModel.FEMALE_TYPE){
+                    analysisModelComplex.setType(AnalysisModel.FEMALE_TYPE);
+                } else {
+                    analysisModelComplex.setType(AnalysisModel.NEUTRAL_TYPE);
+                }
+                list.add(analysisModelComplex);
+            }*/
+        }
+        return list;
+    }
+
+    private List<AnalysisModel> addTitles(List<ComplexAnalysis> listGroup, String name) {
+        boolean isPrevMale = false;
+        boolean isPrevFemale = false;
+        int prevGroup = listGroup.get(0).getGroup();
+        String units = listGroup.get(0).getUnits();
+        List<AnalysisModel> listAnalysisModel = new LinkedList<>();
+        for (int i = 0; i < listGroup.size(); i++) {
+                if (listGroup.get(i).getGroup() == prevGroup){
+                    if (listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && !isPrevMale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.MALE_TYPE, listGroup.get(i).getUnits()));
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                        isPrevMale = true;
+                    }else if(listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && isPrevMale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && !isPrevFemale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.FEMALE_TYPE, listGroup.get(i).getUnits()));
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                        isPrevFemale = true;
+                    }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && isPrevFemale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    } else {
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    }
+                } else{
+                    listAnalysisModel.add(new AnalysisModel(AnalysisModel.TITLE_TYPE, name, listGroup.get(i).getUnits()));
+                    isPrevMale = false;
+                    isPrevFemale = false;
+                    if (listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && !isPrevMale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.MALE_TYPE, listGroup.get(i).getUnits()));
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                        isPrevMale = true;
+                    }else if(listGroup.get(i).getSex() == AnalysisModel.MALE_TYPE && isPrevMale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && !isPrevFemale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.FEMALE_TYPE, listGroup.get(i).getUnits()));
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                        isPrevFemale = true;
+                    }else if (listGroup.get(i).getSex() == AnalysisModel.FEMALE_TYPE && isPrevFemale){
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    } else {
+                        listAnalysisModel.add(new AnalysisModel(AnalysisModel.NEUTRAL_TYPE,"", listGroup.get(i).getText(), listGroup.get(i).getValue(), ""));
+                    }
+
+                }
+            prevGroup = listGroup.get(i).getGroup();
+        }
+        return listAnalysisModel;
     }
 
     public ArrayList<SearchResult> search(String query) {
@@ -290,5 +380,39 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
         }
         return false;
+    }
+
+    public ArrayList<ComplexAnalysis> getComplexAnalysis(int analysisId){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+        ArrayList<ComplexAnalysis> result = new ArrayList<>();
+        if (analysisId > 0) {
+            String query = "select * from "
+                    + MainActivity.COMPLEX_ANALYSIS_TABLE_NAME
+                    + " where " + MainActivity.COMPLEX_ANALYSIS_PARENT_ID + " = \"" + String.valueOf(analysisId) +"\""
+                    +";";
+
+            try {
+                cursor = db.rawQuery(query, null);
+
+                while (cursor.moveToNext()) {
+                    ComplexAnalysis mComplexAnalysis = new ComplexAnalysis();
+                    mComplexAnalysis.setText(cursor.getString(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_TEXT)));
+                    mComplexAnalysis.setValue(cursor.getString(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_VALUE)));
+                    mComplexAnalysis.setUnits(cursor.getString(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_UNITS)));
+                    mComplexAnalysis.setSex(cursor.getInt(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_SEX)));
+                    mComplexAnalysis.setGroup(cursor.getInt(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_GROUP)));
+                    mComplexAnalysis.setGroupName(cursor.getString(cursor.getColumnIndex(MainActivity.COMPLEX_ANALYSIS_GROUP_NAME)));
+                    result.add(mComplexAnalysis);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        return result;
     }
 }

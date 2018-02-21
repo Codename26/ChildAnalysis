@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Subcategories;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -12,6 +12,13 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+
+import com.codename26.childanalysis.Analysis.AnalysisActivity;
+import com.codename26.childanalysis.Category;
+import com.codename26.childanalysis.DB.DataBaseHelper;
+import com.codename26.childanalysis.MainActivity;
+import com.codename26.childanalysis.R;
+import com.codename26.childanalysis.RecyclerAdapter;
 
 import java.util.ArrayList;
 

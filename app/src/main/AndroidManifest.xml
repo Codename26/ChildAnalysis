@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.codename26.childanalysis">
+    package="com.codename26.childanalysis"
+    android:versionCode="2"
+    android:versionName="1.1">
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -27,22 +29,22 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchResultsActivity" />
         </activity>
-        <activity android:name=".SubcategoriesActivity">
+        <activity android:name=".Subcategories.SubcategoriesActivity">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchResultsActivity" />
         </activity>
-        <activity android:name=".AnalysisActivity">
+        <activity android:name=".Analysis.AnalysisActivity">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchResultsActivity" />
         </activity>
 
         <service
-            android:name=".DataLoaderService"
+            android:name=".DB.DataLoaderService"
             android:exported="false" />
 
-        <activity android:name=".SearchResultsActivity">
+        <activity android:name=".Search.SearchResultsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -51,7 +53,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".WebViewActivity"></activity>
+        <activity android:name=".Analysis.WebViewActivity"></activity>
     </application>
 
 </manifest>

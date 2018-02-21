@@ -1,10 +1,14 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Subcategories;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.codename26.childanalysis.Category;
+import com.codename26.childanalysis.ListElementViewHolder;
+import com.codename26.childanalysis.RecyclerAdapter;
 
 import java.util.ArrayList;
 

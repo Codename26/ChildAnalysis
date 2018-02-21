@@ -1,7 +1,9 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Analysis;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.List;
 
 public class Analysis implements Parcelable {
     private String mAnalysisName;
@@ -10,6 +12,8 @@ public class Analysis implements Parcelable {
     private String url;
     private int sex;
     private int age;
+    private int id;
+    private List<ComplexAnalysis> mComplexAnalysisList;
 
     public String getAnalysisName() {
         return mAnalysisName;
@@ -59,6 +63,22 @@ public class Analysis implements Parcelable {
         this.url = url;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<ComplexAnalysis> getComplexAnalysisList() {
+        return mComplexAnalysisList;
+    }
+
+    public void setComplexAnalysisList(List<ComplexAnalysis> complexAnalysisList) {
+        mComplexAnalysisList = complexAnalysisList;
+    }
+
 
     @Override
     public int describeContents() {
@@ -73,6 +93,8 @@ public class Analysis implements Parcelable {
         dest.writeString(this.url);
         dest.writeInt(this.sex);
         dest.writeInt(this.age);
+        dest.writeInt(this.id);
+        dest.writeTypedList(this.mComplexAnalysisList);
     }
 
     public Analysis() {
@@ -85,6 +107,8 @@ public class Analysis implements Parcelable {
         this.url = in.readString();
         this.sex = in.readInt();
         this.age = in.readInt();
+        this.id = in.readInt();
+        this.mComplexAnalysisList = in.createTypedArrayList(ComplexAnalysis.CREATOR);
     }
 
     public static final Creator<Analysis> CREATOR = new Creator<Analysis>() {

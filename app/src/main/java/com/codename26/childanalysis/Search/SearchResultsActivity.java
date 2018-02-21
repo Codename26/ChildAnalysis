@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Search;
 
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -10,6 +10,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+
+import com.codename26.childanalysis.Analysis.AnalysisActivity;
+import com.codename26.childanalysis.Category;
+import com.codename26.childanalysis.DB.DataBaseHelper;
+import com.codename26.childanalysis.MainActivity;
+import com.codename26.childanalysis.R;
 
 import java.util.ArrayList;
 

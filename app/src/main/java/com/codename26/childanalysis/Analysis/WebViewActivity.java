@@ -1,4 +1,4 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Analysis;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import com.codename26.childanalysis.MainActivity;
+import com.codename26.childanalysis.R;
 
 public class WebViewActivity extends AppCompatActivity {
     private WebView mWebView;

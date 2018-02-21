@@ -1,8 +1,10 @@
-package com.codename26.childanalysis;
+package com.codename26.childanalysis.Search;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.codename26.childanalysis.R;
 
 /**
  * Created by PC on 21.11.2017.
