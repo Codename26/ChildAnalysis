@@ -28,7 +28,6 @@
         android:padding="3dp"
         android:textSize="16sp"
         android:gravity="center_vertical"
-        android:layout_gravity="center_vertical"
-        android:text="TextView" />
+        android:layout_gravity="center_vertical" />
 
 </LinearLayout>

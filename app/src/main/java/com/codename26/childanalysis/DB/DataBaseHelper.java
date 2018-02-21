@@ -20,7 +20,7 @@ import java.util.List;
 public class DataBaseHelper extends SQLiteOpenHelper {
     private Context mContext;
     public DataBaseHelper(Context context) {
-        super(context, "analysisDB.db", null, 1);
+        super(context, "analysisDB.db", null, 2);
         mContext = context;
     }
 
@@ -95,8 +95,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (subcategory > 0) {
             String query = "select " + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_NAME + ", "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.VALUE + ", "
-                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL
-                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + ", "
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.URL + ", "
+                    + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID
                     + " from " + MainActivity.ANALYSIS_TABLE_NAME
                     + " inner join " + MainActivity.SUBCATEGORY_ANALYSIS_TABLE_NAME + " on "
                     + MainActivity.ANALYSIS_TABLE_NAME + "." + MainActivity.ANALYSIS_ID + " = "
@@ -174,7 +174,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
         }
         for (int i = 0; i < result.size(); i++) {
-            List<ComplexAnalysis> list = new ArrayList<>();
+            List<ComplexAnalysis> list;
             list = getComplexAnalysis(result.get(i).getId());
             if (list.size() > 0){
                 result.get(i).setComplexAnalysisList(list);
@@ -197,21 +197,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
             list.add(analysisModel);
             list.addAll(addTitles(tempAnalysis.getComplexAnalysisList(), tempAnalysis.getAnalysisName()));
-           // List list1 = sortComplexAnalysisList(tempAnalysis.getComplexAnalysisList(), tempAnalysis.getAnalysisName());
-           /* for (int j = 0; j < tempAnalysis.getComplexAnalysisList().size(); j++) {
-                AnalysisModel analysisModelComplex = new AnalysisModel();
-                analysisModelComplex.setText(tempAnalysis.getComplexAnalysisList().get(j).getText());
-                analysisModelComplex.setValue(tempAnalysis.getComplexAnalysisList().get(j).getValue());
-                analysisModelComplex.setUnits(tempAnalysis.getComplexAnalysisList().get(j).getUnits());
-                if (tempAnalysis.getComplexAnalysisList().get(j).getSex() == AnalysisModel.MALE_TYPE){
-                    analysisModelComplex.setType(AnalysisModel.MALE_TYPE);
-                } else if (tempAnalysis.getComplexAnalysisList().get(j).getSex() == AnalysisModel.FEMALE_TYPE){
-                    analysisModelComplex.setType(AnalysisModel.FEMALE_TYPE);
-                } else {
-                    analysisModelComplex.setType(AnalysisModel.NEUTRAL_TYPE);
-                }
-                list.add(analysisModelComplex);
-            }*/
         }
         return list;
     }
