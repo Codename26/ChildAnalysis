@@ -18,6 +18,10 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ArrayList<AnalysisModel> mDataSet;
     Context mContext;
 
+    public interface InfoButtonClickListener{
+        void OnInfoButtonClick(AnalysisModel analysisModel);
+    }
+
     public static class TitleTypeViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvName;
@@ -88,7 +92,7 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        AnalysisModel item = mDataSet.get(position);
+        final AnalysisModel item = mDataSet.get(position);
         Typeface fontMontserratBold = Typeface.createFromAsset(mContext.getAssets(),  "fonts/montserrat_bold.otf");
         Typeface fontMontserratMedium = Typeface.createFromAsset(mContext.getAssets(),  "fonts/montserrat_medium.otf");
         if (item != null){
@@ -96,6 +100,7 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 case AnalysisModel.TITLE_TYPE:
                     ((TitleTypeViewHolder) holder).tvName.setText(item.getName());
                     ((TitleTypeViewHolder) holder).tvName.setTypeface(fontMontserratBold);
+                    ((TitleTypeViewHolder) holder).ivInfoButton.setVisibility(View.INVISIBLE);
 
                     if (  android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
                     {
@@ -104,7 +109,7 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     else {
                         ((TitleTypeViewHolder) holder).tvUnits.setText(Html.fromHtml(item.getUnits()));
                     }
-                    ((TitleTypeViewHolder) holder).tvUnits.setTypeface(fontMontserratBold);
+                    ((TitleTypeViewHolder) holder).tvUnits.setTypeface(fontMontserratMedium);
                     break;
                 case AnalysisModel.MALE_TYPE:
                    // ((MaleTypeViewHolder) holder).tvText.setText(item.getText());
@@ -132,11 +137,28 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ((FemaleTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
                     break;
                 case AnalysisModel.NEUTRAL_TYPE:
-                    ((NeutralTypeViewHolder) holder).tvText.setText(item.getText());
+                    if (!item.getText().equals("")) {
+                        ((NeutralTypeViewHolder) holder).tvText.setText(item.getText());
+                        ((NeutralTypeViewHolder) holder).tvValue.setText(item.getValue());
+                        ((NeutralTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
+                    } else {
+                        ((NeutralTypeViewHolder) holder).tvText.setText(item.getValue());
+                    }
                     ((NeutralTypeViewHolder) holder).tvText.setTypeface(fontMontserratMedium);
-                    ((NeutralTypeViewHolder) holder).tvValue.setText(item.getValue());
-                    ((NeutralTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
+
                     break;
+            }
+        }
+
+        if (item.getUrl() != null && !item.getUrl().equals("") ){
+            ((TitleTypeViewHolder) holder).ivInfoButton.setVisibility(View.VISIBLE);
+            if (mInfoButtonClickListener != null) {
+                ((TitleTypeViewHolder) holder).ivInfoButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mInfoButtonClickListener.OnInfoButtonClick(item);
+                    }
+                });
             }
         }
     }
@@ -160,5 +182,11 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemCount() {
         return mDataSet.size();
+    }
+
+    private MultipleTypeAdapter.InfoButtonClickListener mInfoButtonClickListener;
+
+    public void setInfoButtonClickListener(MultipleTypeAdapter.InfoButtonClickListener listener){
+        mInfoButtonClickListener = listener;
     }
 }

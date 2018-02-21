@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codename26.childanalysis"
-    android:versionCode="2"
-    android:versionName="1.1">
+    android:versionCode="4"
+    android:versionName="1.3">
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -27,17 +27,17 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchResultsActivity" />
+                android:value=".Search.SearchResultsActivity" />
         </activity>
         <activity android:name=".Subcategories.SubcategoriesActivity">
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchResultsActivity" />
+                android:value=".Search.SearchResultsActivity" />
         </activity>
         <activity android:name=".Analysis.AnalysisActivity">
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchResultsActivity" />
+                android:value=".Search.SearchResultsActivity" />
         </activity>
 
         <service
