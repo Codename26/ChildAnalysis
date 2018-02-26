@@ -20,7 +20,7 @@ import java.util.List;
 public class DataBaseHelper extends SQLiteOpenHelper {
     private Context mContext;
     public DataBaseHelper(Context context) {
-        super(context, "analysisDB.db", null, 2);
+        super(context, "analysisDB.db", null, 3);
         mContext = context;
     }
 
