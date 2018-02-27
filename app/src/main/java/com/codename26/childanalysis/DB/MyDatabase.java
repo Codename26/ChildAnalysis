@@ -12,13 +12,10 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
 
-/**
- * Created by PC on 24.11.2017.
- */
 
 public class MyDatabase extends SQLiteAssetHelper {
     private static final String DATABASE_NAME = "analysisDB.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     public MyDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         setForcedUpgrade();
