@@ -12,6 +12,7 @@ public class AnalysisModel implements Parcelable {
     public static final int FEMALE_TYPE=2;
     public static final int NEUTRAL_TYPE=3;
     public static final int SUBTITLE_TYPE=3;
+    public static final int AD_TYPE = 4;
 
     private int mType;
     private String mName;
@@ -30,6 +31,10 @@ public class AnalysisModel implements Parcelable {
 
     public  AnalysisModel(){
 
+    }
+
+    public AnalysisModel(int type){
+        mType = type;
     }
 
     public AnalysisModel(int type, String units){

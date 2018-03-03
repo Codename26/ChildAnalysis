@@ -16,6 +16,7 @@ import com.codename26.childanalysis.Category;
 import com.codename26.childanalysis.DB.DataBaseHelper;
 import com.codename26.childanalysis.MainActivity;
 import com.codename26.childanalysis.R;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 
@@ -27,16 +28,19 @@ public class SearchResultsActivity extends AppCompatActivity {
     private Toolbar myToolbar;
     private String query;
     private ArrayList<SearchResult> mSearchResults;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar_search_results);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         handleIntent(getIntent());
+
     }
 
     private void handleIntent(Intent intent) {

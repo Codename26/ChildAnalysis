@@ -7,8 +7,8 @@ android {
         applicationId "com.codename26.childanalysis"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 5
-        versionName "1.4"
+        versionCode 6
+        versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -20,6 +20,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-core:11.0.4'
+    implementation 'com.google.firebase:firebase-ads:11.0.4'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -39,3 +41,7 @@ allprojects {
         }
     }
 }
+
+
+
+apply plugin: 'com.google.gms.google-services'

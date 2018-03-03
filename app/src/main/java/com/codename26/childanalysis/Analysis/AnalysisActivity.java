@@ -18,12 +18,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ImageView;
 
+
 import com.codename26.childanalysis.Category;
 import com.codename26.childanalysis.DB.DataBaseHelper;
 import com.codename26.childanalysis.MainActivity;
 import com.codename26.childanalysis.MultipleTypeAdapter.AnalysisModel;
 import com.codename26.childanalysis.MultipleTypeAdapter.MultipleTypeAdapter;
 import com.codename26.childanalysis.R;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,8 @@ public class AnalysisActivity extends AppCompatActivity {
     private ArrayList<AnalysisModel> mAnalysisModels;
     private ArrayList<ComplexAnalysis> mComplexAnalyses;
     private ImageView mInfoButton;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class AnalysisActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Intent intent = getIntent();
         if (intent.getAction().equals(MainActivity.ACTION_SUBCATEGORY_ANALYSIS)) {
@@ -97,9 +102,8 @@ public class AnalysisActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-
-
         MultipleTypeAdapter adapter = new MultipleTypeAdapter(mAnalysisModels, this);
+
         LinearLayoutManager llManager = new LinearLayoutManager(this);
         adapter.setInfoButtonClickListener(new MultipleTypeAdapter.InfoButtonClickListener() {
             @Override
@@ -113,6 +117,7 @@ public class AnalysisActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(llManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(adapter);
+
         initToolBar();
 
     }

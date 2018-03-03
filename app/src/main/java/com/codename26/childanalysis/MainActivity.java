@@ -22,6 +22,8 @@ import com.codename26.childanalysis.Analysis.AnalysisActivity;
 import com.codename26.childanalysis.DB.DataBaseHelper;
 import com.codename26.childanalysis.DB.MyDatabase;
 import com.codename26.childanalysis.Subcategories.SubcategoriesActivity;
+import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private MyDatabase mMyDatabase;
     private DataBaseHelper helper;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public Toolbar toolbar;
 
@@ -91,12 +94,14 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MobileAds.initialize(this, getString(R.string.ADMOB_APP_ID));
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         mMyDatabase =  new MyDatabase(MainActivity.this);
         helper = new DataBaseHelper(MainActivity.this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         categories = mMyDatabase.getCategories(0);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
