@@ -143,6 +143,7 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((NeutralTypeViewHolder) holder).tvValue.setTypeface(fontMontserratMedium);
                     } else {
                         ((NeutralTypeViewHolder) holder).tvText.setText(item.getValue());
+                        ((NeutralTypeViewHolder) holder).tvValue.setText("");
                     }
                     ((NeutralTypeViewHolder) holder).tvText.setTypeface(fontMontserratMedium);
 
