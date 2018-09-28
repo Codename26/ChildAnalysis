@@ -5,6 +5,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,15 +19,27 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.codename26.childanalysis.Ads.AdManager;
 import com.codename26.childanalysis.Analysis.AnalysisActivity;
 import com.codename26.childanalysis.DB.DataBaseHelper;
 import com.codename26.childanalysis.DB.MyDatabase;
 import com.codename26.childanalysis.Subcategories.SubcategoriesActivity;
+import com.google.android.gms.ads.AdListener;
+//import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import ru.apperate.ads.delegate.InterstitialAdListener;
+import ru.apperate.ads.InterstitialAd;
 
 public class MainActivity extends AppCompatActivity {
     public static final String CATEGORIES_TABLE_NAME = "categories";
@@ -78,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String COMPLEX_ANALYSIS_GROUP = "_group";
     public static final String COMPLEX_ANALYSIS_GROUP_NAME = "group_name";
     public static String SUBCATEGORY_ANALYSIS_TABLE_NAME = "subcategory_analysis";
+    private static final String SHOW_ADS = "show_ads";
 
     private ArrayList<Category> categories;
     private RecyclerView mRecyclerView;
@@ -86,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
     private MyDatabase mMyDatabase;
     private DataBaseHelper helper;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private long cacheExpiration = 0;
 
     public Toolbar toolbar;
 
@@ -103,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
         helper = new DataBaseHelper(MainActivity.this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+
+        //
         categories = mMyDatabase.getCategories(0);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -115,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setItemClickListener(new RecyclerAdapter.ItemClickListener() {
             @Override
             public void OnItemClick(Category category) {
-                Log.d("Category_has_sub", String.valueOf(category.getHasSubcategory()));
+//                Log.d("Category_has_sub", String.valueOf(category.getHasSubcategory()));
                 if (category.getHasSubcategory() > 0) {
                     Intent intent = new Intent(MainActivity.this, SubcategoriesActivity.class);
                     intent.putExtra(MainActivity.EXTRA_CATEGORY, category);
@@ -131,6 +150,80 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Firebase Remote Config
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettings(configSettings);
+        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        mFirebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            mFirebaseRemoteConfig.activateFetched();
+//                            Toast.makeText(MainActivity.this, "Fetch succesfull", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(MainActivity.this, String.valueOf(mFirebaseRemoteConfig.getBoolean(SHOW_ADS)), Toast.LENGTH_SHORT).show();
+                            if (mFirebaseRemoteConfig.getBoolean(SHOW_ADS)){
+//                                Log.d("Show ads ", "True");
+                                initAd();
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    private void initAd() {
+//        Log.d("InitAd ", "True");
+        AdManager adManager = new AdManager(this);
+
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (day != adManager.getDay()) {
+            adManager.setDay(day);
+
+            InterstitialAd interstitialAd = new InterstitialAd(this);
+
+            interstitialAd.setInterstitialAdListener(new InterstitialAdListener() {
+                @Override
+                public void onInterstitialLoaded(InterstitialAd interstitialAd) {
+                    Log.d("onInterstitialLoaded","Show ad");
+                    interstitialAd.show();
+
+                }
+
+                @Override
+                public void onInterstitialShowed() {
+
+                }
+
+                @Override
+                public void onInterstitialClicked() {
+
+                }
+
+                @Override
+                public void onInterstitialClosed() {
+
+                }
+
+                @Override
+                public void onInterstitialError(Error error) {
+
+                }
+            });
+//            Log.d("interstitialAd.load","interstitialAd.load");
+            interstitialAd.load();
+
+        }
     }
 
 
