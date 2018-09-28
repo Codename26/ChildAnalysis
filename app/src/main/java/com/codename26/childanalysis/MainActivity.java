@@ -14,9 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codename26.childanalysis.Analysis.AnalysisActivity;
 import com.codename26.childanalysis.DB.DataBaseHelper;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String SUBCATEGORY_NAME = "subcategory_name";
     public static final String SUBCATEGORY_NAME_LC = "subcategory_name_lc";
     public static final String CATEGORY_ID = "category_id";
-    public static final String SUBCATEGORY_ID = "subcategory_id" ;
+    public static final String SUBCATEGORY_ID = "subcategory_id";
     public static final String ANALYSIS_ID = "analysis_id";
     public static final String ANALYSIS_TABLE_NAME = "analysis";
     public static final String ANALYSIS_NAME = "analysis_name";
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String COMPLEX_ANALYSIS_SEX = "sex";
     public static final String COMPLEX_ANALYSIS_GROUP = "_group";
     public static final String COMPLEX_ANALYSIS_GROUP_NAME = "group_name";
+    public static final String PRIVACY_POLICY_URL = "https://gradusnik.net/privacy-policy-politika-konfidentsialnosti/";
     public static String SUBCATEGORY_ANALYSIS_TABLE_NAME = "subcategory_analysis";
 
     private ArrayList<Category> categories;
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        mMyDatabase =  new MyDatabase(MainActivity.this);
+        mMyDatabase = new MyDatabase(MainActivity.this);
         helper = new DataBaseHelper(MainActivity.this);
 
         categories = mMyDatabase.getCategories(0);
@@ -126,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
 
@@ -139,11 +143,11 @@ public class MainActivity extends AppCompatActivity {
         mDialog.show();
         TextView tvExit = (TextView) mDialog.getWindow().findViewById(R.id.tvClose);
         TextView tvRate = mDialog.getWindow().findViewById(R.id.tvRateThisApp);
-      //  TextView tvOtherApps = mDialog.getWindow().findViewById(R.id.tvOtherApps);
+        //  TextView tvOtherApps = mDialog.getWindow().findViewById(R.id.tvOtherApps);
         tvExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               finish();
+                finish();
             }
         });
         tvRate.setOnClickListener(new View.OnClickListener() {
@@ -185,6 +189,24 @@ public class MainActivity extends AppCompatActivity {
                 searchManager.getSearchableInfo(getComponentName()));
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                // ATTENTION: This was auto-generated to handle app links.
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse(PRIVACY_POLICY_URL));
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     @Override
