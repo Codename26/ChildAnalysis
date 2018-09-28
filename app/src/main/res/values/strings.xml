@@ -11,5 +11,7 @@
     <string name="close_app">Закрыть приложение</string>
     <string name="read_more">Подробнее...</string>
     <string name="dev_name">Viacheslav Burchenko</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3783355790760246/6575847330</string>
+    <string name="ADMOB_APP_ID">ca-app-pub-3783355790760246~7207290773</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
 </resources>

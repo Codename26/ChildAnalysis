@@ -11,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codename26.childanalysis.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 
 public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<AnalysisModel> mDataSet;
-    Context mContext;
+    private Context mContext;
 
     public interface InfoButtonClickListener{
         void OnInfoButtonClick(AnalysisModel analysisModel);
@@ -65,6 +67,14 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public static class AdTypeViewHolder extends RecyclerView.ViewHolder {
+        AdView adView;
+        public AdTypeViewHolder(View itemView) {
+            super(itemView);
+            adView = itemView.findViewById(R.id.adView);
+        }
+    }
+
     public MultipleTypeAdapter(ArrayList<AnalysisModel> data, Context context){
         mDataSet = data;
         mContext = context;
@@ -86,6 +96,9 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case AnalysisModel.NEUTRAL_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.neutral_type_layout, parent, false);
                 return new NeutralTypeViewHolder(view);
+            case AnalysisModel.AD_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ad_container, parent, false);
+                return new AdTypeViewHolder(view);
         }
         return null;
     }
@@ -146,7 +159,10 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((NeutralTypeViewHolder) holder).tvValue.setText("");
                     }
                     ((NeutralTypeViewHolder) holder).tvText.setTypeface(fontMontserratMedium);
-
+                    break;
+                case AnalysisModel.AD_TYPE:
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    ((AdTypeViewHolder) holder).adView.loadAd(adRequest);
                     break;
             }
         }
@@ -175,6 +191,8 @@ public class MultipleTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return AnalysisModel.FEMALE_TYPE;
             case 3:
                 return AnalysisModel.NEUTRAL_TYPE;
+            case 4:
+                return AnalysisModel.AD_TYPE;
          default:
              return -1;
         }

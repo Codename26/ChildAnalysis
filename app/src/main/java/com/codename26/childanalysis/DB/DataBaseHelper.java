@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
+    private static final int ADS_SKIP_COUNT = 3;
     private Context mContext;
     public DataBaseHelper(Context context) {
         super(context, "analysisDB.db", null, 3);
@@ -180,7 +181,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 result.get(i).setComplexAnalysisList(list);
             }
         }
-        return analysisToAnalysisModel(result);
+        return injectAds(analysisToAnalysisModel(result));
+    }
+
+    private ArrayList<AnalysisModel> injectAds(ArrayList<AnalysisModel> analysisModels) {
+        int ctr = 0;
+        for (int i = 0; i < analysisModels.size(); i++) {
+            if (analysisModels.get(i).getType() == AnalysisModel.TITLE_TYPE){
+                ctr++;
+            }
+            if (ctr > ADS_SKIP_COUNT){
+                analysisModels.add(i, new AnalysisModel(AnalysisModel.AD_TYPE));
+                ctr = 0;
+            }
+        }
+        return analysisModels;
     }
 
     private ArrayList<AnalysisModel> analysisToAnalysisModel(ArrayList<Analysis> result) {

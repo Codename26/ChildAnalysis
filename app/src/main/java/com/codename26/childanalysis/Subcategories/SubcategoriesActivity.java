@@ -19,6 +19,7 @@ import com.codename26.childanalysis.DB.DataBaseHelper;
 import com.codename26.childanalysis.MainActivity;
 import com.codename26.childanalysis.R;
 import com.codename26.childanalysis.RecyclerAdapter;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 
@@ -29,11 +30,13 @@ public class SubcategoriesActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private Toolbar myToolbar;
     private Category mCategory;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subcategories);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar_search_results);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
