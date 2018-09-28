@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int ADS_SKIP_COUNT = 3;
+    private static final int ADS_SKIP_COUNT = 5;
     private Context mContext;
     public DataBaseHelper(Context context) {
         super(context, "analysisDB.db", null, 3);
